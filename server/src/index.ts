@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './config/db';
 import authRoutes from './routes/auth.Routes';
+import gatoRoutes from './routes/gato.Routes';
 
 //cargar variables de entorno
 dotenv.config();
@@ -19,6 +20,7 @@ app.use(express.json());
 
 // --------- Definir Rutas de la API --------- //
 app.use('/api/auth', authRoutes);
+app.use('/api/gatos', gatoRoutes);
 
 // Rutas de ejemplo
 app.get('/', (req: Request, res: Response) => {
