@@ -2,6 +2,7 @@ import express, { Request, Response, Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './config/db';
+import authRoutes from './routes/auth.Routes';
 
 //cargar variables de entorno
 dotenv.config();
@@ -16,9 +17,12 @@ const PORT = process.env.PORT || 8080;
 app.use(cors());
 app.use(express.json());
 
+// --------- Definir Rutas de la API --------- //
+app.use('/api/auth', authRoutes);
+
 // Rutas de ejemplo
 app.get('/', (req: Request, res: Response) => {
-  res.send('¡Servidor Express funcionando correctamente!');
+  res.send('¡Servidor KATZE funcionando correctamente!');
 });
 
 // Iniciar el servidor
