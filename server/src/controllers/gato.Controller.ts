@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import Gato, {IGato} from "../models/Gato.Model";
-//import { UploadedFile } from "express-fileupload";
-//import cloudinary from "../config/cloudinary";
+import { UploadedFile } from "express-fileupload";
+import cloudinary from "../config/cloudinary";
+import fs from 'fs';
 
 /**
  * @desc obtener dtodos los gatos
@@ -41,10 +42,32 @@ export const getGatoById = async (req: Request, res: Response) => {
  */
 export const createGato = async (req: Request, res: Response) => {
     try {
-        //espacio para la logica de subida de fotos que se anadira aqui mas tarde
+    
         const { nombre, descripcion, edad, caracter, estadoSalud, estado } = req.body;
 
         try {
+            // validar que vengan los datos
+            if (!nombre || !descripcion || !edad || !caracter || !estadoSalud || !estado) {
+                return res.status(400).json({ message: "todos los campos de texto son requeridos" });
+            }
+
+            // validar que venga la imagen
+            if (!req.files || !req.files.foto) {
+                return res.status(400).json({ message: "Se requiere una imagen para el gato" });
+            }
+
+            const foto = req.files.foto as UploadedFile;
+
+            // subir la imagen a Cloudinary
+            const result = await cloudinary.uploader.upload(foto.tempFilePath, {
+                folder: 'katze/gatos', // Carpeta donde se guardara en Cloudinary
+                public_id: `${Date.now()}-${foto.name}` // Nombre unico para evitar colisiones
+            });
+
+            // Borrar el archivo temporal del servidor
+            fs.unlinkSync(foto.tempFilePath);
+
+            // crear el nuevo gato con la url de la foto de cloudinary
             const nuevoGato = new Gato({
                 nombre,
                 descripcion,
@@ -52,15 +75,17 @@ export const createGato = async (req: Request, res: Response) => {
                 caracter,
                 estadoSalud,
                 estado,
-                fotos: ['url_de_ejemplo.jpg'] // reemplazar con las URLs reales despues de implementar la subida de fotos,
+                fotos: [result.secure_url] // usar la URL segura de Cloudinary
             })
 
             const gatoGuardado = await nuevoGato.save();
             res.status(201).json(gatoGuardado);
+
         } catch (error) {
             res.status(500).json({ message: "Error en el servidor al crear el gato", error });
         }
     } catch (error) {
+        console.error("Error inesperado al crear el gato:", error);
         res.status(500).json({ message: "Error en el servidor", error });
     }
 };

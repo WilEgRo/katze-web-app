@@ -6,7 +6,7 @@ import {
     updateGato,
     deleteGato
 } from "../controllers/gato.Controller";
-import { protect } from "../middleware/auth.middleware";
+import { protect } from "../middleware/auth.Middleware";
 
 const router = Router();
 
