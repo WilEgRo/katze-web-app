@@ -52,25 +52,25 @@
     │   │   └── db.ts
     │   │
     │   ├── controllers/    # (Lógica de negocio)
-    │   │   ├── authController.ts     # (Lógica de login/registro)
-    │   │   ├── gatoController.ts     # (Lógica CRUD de Gatos)
-    │   │   ├── reporteController.ts  # (Lógica CRUD de Reportes - ¡Próximo paso!)
+    │   │   ├── auth.Controller.ts     # (Lógica de login/registro)
+    │   │   ├── gato.Controller.ts     # (Lógica CRUD de Gatos)
+    │   │   ├── reporte.Controller.ts  # (Lógica CRUD de Reportes - ¡Próximo paso!)
     │   │   └── (otros... ej: hogarTemporalController.ts)
     │   │
     │   ├── middleware/     # (Funciones intermedias)
-    │   │   ├── authMiddleware.ts     # (Seguridad de rutas - 'protect')
-    │   │   └── validatorMiddleware.ts # (Seguridad de datos - 'express-validator')
+    │   │   ├── auth.Middleware.ts     # (Seguridad de rutas - 'protect')
+    │   │   └── validator.Middleware.ts # (Seguridad de datos - 'express-validator')
     │   │
     │   ├── models/         # (Esquemas de la Base de Datos)
-    │   │   ├── GatoModel.ts
-    │   │   ├── ReportePerdidoModel.ts
-    │   │   ├── UserModel.ts
+    │   │   ├── Gato.Model.ts
+    │   │   ├── ReportePerdido.Model.ts
+    │   │   ├── User.Model.ts
     │   │   └── (otros... ej: HogarTemporalModel.ts)
     │   │
     │   ├── routes/         # (Definición de las URLs de la API)
-    │   │   ├── authRoutes.ts
-    │   │   ├── gatoRoutes.ts
-    │   │   └── reporteRoutes.ts # (¡Próxmo paso!)
+    │   │   ├── auth.Routes.ts
+    │   │   ├── gato.Routes.ts
+    │   │   └── reporte.Routes.ts # (¡Próxmo paso!)
     │   │
     │   └── index.ts        # (Punto de entrada del Servidor Express)
     │
