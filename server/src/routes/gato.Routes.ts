@@ -7,6 +7,7 @@ import {
     deleteGato
 } from "../controllers/gato.Controller";
 import { protect } from "../middleware/auth.Middleware";
+import { gatoRules, validate } from "../middleware/validator.Middleware";
 
 const router = Router();
 
@@ -15,7 +16,7 @@ router.get("/", getGatos); // GET /api/gatos
 router.get("/:id", getGatoById); // GET /api/gatos/:id
 
 // ------------ Rutas Privadas (Admin) ------------ //
-router.post("/", protect, createGato); // POST /api/gatos
+router.post("/", protect, gatoRules(), validate, createGato); // POST /api/gatos
 router.put("/:id", protect, updateGato); // PUT /api/gatos/:id
 router.delete("/:id", protect, deleteGato); // DELETE /api/gatos/:id
 
