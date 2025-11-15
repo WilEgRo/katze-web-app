@@ -97,3 +97,36 @@ export const gatoRules = () => [
         .isIn(['enAdopcion', 'adoptado', 'hogarTemporal']) // validar que el estado este entre estos valores
         .withMessage('El estado debe ser uno de: enAdopcion, adoptado, hogarTemporal'),
 ];
+
+//----------------------------------------------
+// REGLAS PARA REPORTES DE GATOS PERDIDOS
+//----------------------------------------------
+export const reporteRules = () => [
+    body('descripcion')
+        .notEmpty()
+        .withMessage('La descripcion es obligatoria')
+        .trim()
+        .escape(), // sanitisacion XSS (XSS significa Cross-Site Scripting y es un tipo de ataque que inyecta codigo malicioso en aplicaciones web)
+    
+    body('zona')
+        .notEmpty()
+        .withMessage('La zona es obligatoria')
+        .trim()
+        .escape(),
+
+    body('contacto')
+        .notEmpty()
+        .withMessage('La informacion de contacto es obligatoria')
+        .trim()
+        .escape(),
+    
+    body('fecha')
+        .optional() // la fecha es opcional, si no se provee se usara la fecha actual
+        .isISO8601() // validar formato de fecha ISO 8601 (YYYY-MM-DD)
+        .toDate(), // Sanitizacion: convertir a objeto Date de JavaScript
+
+    body('nombreGato')
+        .optional() // el nombre del gato es opcional
+        .trim()
+        .escape(), // aun asi si lo envia se sanitiza
+];
