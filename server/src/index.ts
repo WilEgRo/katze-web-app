@@ -4,6 +4,7 @@ import cors from 'cors';
 import connectDB from './config/db';
 import authRoutes from './routes/auth.Routes';
 import gatoRoutes from './routes/gato.Routes';
+import reporteRoutes from './routes/reporte.Routes';
 import fileUpload = require('express-fileupload');
 
 //cargar variables de entorno
@@ -25,8 +26,9 @@ app.use(fileUpload({
 }))
 
 // --------- Definir Rutas de la API --------- //
-app.use('/api/auth', authRoutes);
-app.use('/api/gatos', gatoRoutes);
+app.use('/api/auth', authRoutes); //→ Rutas de autenticación
+app.use('/api/gatos', gatoRoutes); //→ Rutas de gestión de gatos
+app.use('/api/reportes', reporteRoutes); //→ Rutas de gestión de reportes
 
 // Rutas de ejemplo
 app.get('/', (req: Request, res: Response) => {
