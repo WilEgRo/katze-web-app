@@ -69,3 +69,68 @@ export const getReportesAprobados = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Error en el servidor al obtener los reportes' });
     }
 }
+
+/**
+ * @desc Obtener TODOS los reportes (Pendientes, Aprobados, etc.)
+ * @route GET /api/reportes/admin/all
+ * @access Private (Admin)
+ */
+export const getAllReportesAdmin = async (req: Request, res: Response) => {
+    try {
+        const reportes = await ReportePerdido.find().sort({ createdAt: -1 });
+        res.status(200).json(reportes);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener los reportes' });
+    }
+};
+
+/**
+ * @desc Actualizar el estado de un reporte (Aprobar/Rechazar - Protegido Admin)
+ * @route PUT /api/reportes/admin/:id
+ * @access Private (Admin)
+ */
+export const updateReporteEstado = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { estado } = req.body; // El admin enviará el nuevo estado (ej: "aprobado" o "rechazado") 
+
+    // Validación de seguridad
+    if (!['aprobado', 'rechazado'].includes(estado)) {
+        return res.status(400).json({ message: 'Estado no válido' });
+    }
+
+    try {
+        const reporte = await ReportePerdido.findById(id);
+
+        if (!reporte) {
+        return res.status(404).json({ message: 'Reporte no encontrado' });
+        }
+
+        reporte.estado = estado;
+        await reporte.save();
+
+        res.status(200).json({ message: `Reporte ${estado} exitosamente`, reporte });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al actualizar el reporte' });
+    }
+};
+
+/**
+ * @desc Eliminar un reporte (Protegido Admin)
+ * @route DELETE /api/reportes/admin/:id
+ * @access Private (Admin)
+ */
+export const deleteReporte = async (req: Request, res: Response) => {
+  try {
+    const reporte = await ReportePerdido.findByIdAndDelete(req.params.id);
+
+    if (!reporte) {
+      return res.status(404).json({ message: 'Reporte no encontrado' });
+    }
+
+    // mas adelante aqui vamos a crear la logica para borrar la imagen de Cloudinary
+
+    res.status(200).json({ message: 'Reporte eliminado exitosamente' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al eliminar el reporte' });
+  }
+};
