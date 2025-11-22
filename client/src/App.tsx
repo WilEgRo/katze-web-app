@@ -1,10 +1,38 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import HomePage from './pages/HomePage';
+import AdoptaPage from './pages/AdoptaPage';
+import ReportarPage from './pages/ReportarPage';
+import AdminLoginPage from './pages/AdminLoginPage';
+import DashboardPage from './pages/DashboardPage';
+import { useTheme } from './context/ThemeContext'; // <--- 1. Importamos el hook
+
+// Creamos este componente "interno" para poder usar el hook useTheme
+// (No podemos usar useTheme directamente dentro de App porque App es el que tiene el Provider)
+const AppContent = () => {
+  const { theme } = useTheme(); // <--- 2. Obtenemos el estado actual (light o dark)
+  
+  return (
+    // 3. AQUÍ ESTÁ LA MAGIA DEL FONDO:
+    // Si theme es 'dark', usa 'bg-katze-dark' (negro). Si no, 'bg-white'.
+    <div className={`min-h-screen font-sans transition-colors duration-300 ${theme === 'dark' ? 'bg-katze-dark' : 'bg-white'}`}>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/adopta" element={<AdoptaPage />} />
+        <Route path="/reportar" element={<ReportarPage />} />
+        <Route path="/login" element={<AdminLoginPage />} />
+        <Route path="/admin/dashboard" element={<DashboardPage />} />
+      </Routes>
+    </div>
+  );
+};
+
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
-      <h1 className="text-3xl font-bold text-katze-gold text-center mt-10">
-        ¡Frontend de KATZE Iniciado! 🐱
-      </h1>
-    </div>
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 
