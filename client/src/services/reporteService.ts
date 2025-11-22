@@ -26,7 +26,7 @@ export const getReportesPublicos = async (): Promise<Reporte[]> => {
 
 // [ADMIN] funcion para obtener todos los reportes (incluyendo pendientes, Aprobados y rechazados)
 export const getAllReportesAdmin = async (): Promise<Reporte[]> => {
-    const response = await apiClient.get('/admin/reportes/all');
+    const response = await apiClient.get('reportes/admin/all');
     return response.data;
 }
 

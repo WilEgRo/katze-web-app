@@ -140,7 +140,7 @@ const DashboardPage = () => {
                         {reporte.zona}
                       </h3>
                       <span className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
-                        {new Date(reporte.fecha).toLocaleDateString()}
+                        {new Date(reporte.fecha).toLocaleDateString('es-ES', { timeZone: 'UTC' })}
                       </span>
                     </div>
                     
