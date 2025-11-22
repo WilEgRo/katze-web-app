@@ -94,8 +94,8 @@ export const gatoRules = () => [
         .escape(),
     
     body('estado')
-        .isIn(['enAdopcion', 'adoptado', 'hogarTemporal']) // validar que el estado este entre estos valores
-        .withMessage('El estado debe ser uno de: enAdopcion, adoptado, hogarTemporal'),
+        .isIn(['enAdopcion', 'adoptado', 'hogarTemporal', 'perdido']) // validar que el estado este entre estos valores
+        .withMessage('El estado debe ser uno de: enAdopcion, adoptado, hogarTemporal, perdido'),
 ];
 
 //----------------------------------------------

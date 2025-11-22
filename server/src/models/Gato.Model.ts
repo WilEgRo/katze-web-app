@@ -40,7 +40,7 @@ const GatoSchema: Schema = new Schema({
     estado: {
       type: String,
       required: true,
-      enum: ['enAdopcion', 'adoptado', 'hogarTemporal'],
+      enum: ['enAdopcion', 'adoptado', 'hogarTemporal', 'perdido'],
       default: 'enAdopcion',
     },
   },

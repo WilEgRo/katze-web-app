@@ -22,7 +22,6 @@ app.use(express.json());
 
 app.use(fileUpload({
   useTempFiles: true, // Usar archivos temporales en lugar de memoria
-  tempFileDir: '/tmp/', // Directorio temporal para almacenar archivos
 }))
 
 // --------- Definir Rutas de la API --------- //

@@ -19,12 +19,11 @@ const HomePage = () => {
           Historias de Éxito
         </h2>
         
-        <div className="text-gray-400 dark:text-gray-300 text-center border border-gray-800 
-                        dark:border-gray-700 p-10 rounded-lg bg-gray-900/50 dark:bg-gray-800/60">
+        <div className="text-gray-400 dark:text-gray-300 text-center border border-gray-800 dark:border-gray-700 p-10 rounded-lg bg-gray-900/50 dark:bg-gray-800/60">
           (Aquí irán las tarjetas de "Milo & Sofía" pronto...)
         </div>
       </section>
-
+      
       {/* SECCIÓN 3: GATOS PERDIDOS */}
       <section className="py-16 bg-gray-100 dark:bg-gray-900 transition-colors">
         <div className="container mx-auto px-8">
@@ -32,7 +31,7 @@ const HomePage = () => {
             Gatos Perdidos de Esterilizar
           </h2>
           <div className="text-gray-400 dark:text-gray-300 text-center border border-gray-800 
-                          dark:border-gray-700 p-10 rounded-lg bg-black/30 dark:bg-gray-800/40">
+          dark:border-gray-700 p-10 rounded-lg bg-black/30 dark:bg-gray-800/40">
             (Aquí irán las tarjetas de reporte de gatos...)
           </div>
         </div>
