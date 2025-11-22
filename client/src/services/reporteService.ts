@@ -23,3 +23,15 @@ export const getReportesPublicos = async (): Promise<Reporte[]> => {
     const response = await apiClient.get('/reportes');
     return response.data;
 }
+
+// [ADMIN] funcion para obtener todos los reportes (incluyendo pendientes, Aprobados y rechazados)
+export const getAllReportesAdmin = async (): Promise<Reporte[]> => {
+    const response = await apiClient.get('/admin/reportes/all');
+    return response.data;
+}
+
+// [ADMIN] funcion para actualizar el estado de un reporte
+export const updateReporteEstado = async (id: string, estado: 'aprobado' | 'rechazado') => {
+    const response = await apiClient.put(`/reportes/admin/${id}`, { estado });
+    return response.data;
+};
