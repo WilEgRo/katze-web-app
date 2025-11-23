@@ -10,12 +10,14 @@ import ProtectedRoute from './components/ProtectedRoute';
 import CreateGatoPage from './pages/CreateGatoPage';
 import Footer from './components/Footer';
 import GatoDetailPage from './pages/GatoDetailPage';
+import DonarPage from './pages/DonarPage';
+import ConfigManager from './pages/Admin/ConfigManager';
 
 // Creamos este componente "interno" para poder usar el hook useTheme
 // (No podemos usar useTheme directamente dentro de App porque App es el que tiene el Provider)
 const AppContent = () => {
   const { theme } = useTheme(); // <--- 2. Obtenemos el estado actual (light o dark)
-  
+
   return (
     // 3. AQUÍ ESTÁ LA MAGIA DEL FONDO:
     // Si theme es 'dark', usa 'bg-katze-dark' (negro). Si no, 'bg-white'.
@@ -27,6 +29,7 @@ const AppContent = () => {
         <Route path="/adopta/:id" element={<GatoDetailPage />} />
         <Route path="/reportar" element={<ReportarPage />} />
         <Route path="/login" element={<AdminLoginPage />} />
+        <Route path="/donar" element={<DonarPage />} />
         <Route
           path="/admin/dashboard"
           element={
@@ -40,6 +43,17 @@ const AppContent = () => {
           element={
             <ProtectedRoute>
               <CreateGatoPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/configuracion"
+          element={
+            <ProtectedRoute>
+              {/* Agregamos un div con padding-top (pt-28) para que el Navbar no tape el contenido */}
+              <div className="container mx-auto px-4 pt-28 pb-12">
+                <ConfigManager />
+              </div>
             </ProtectedRoute>
           }
         />
