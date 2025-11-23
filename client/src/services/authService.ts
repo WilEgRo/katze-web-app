@@ -11,7 +11,7 @@ export const login = async (email: string, password: string): Promise<LoginRespo
 
     //si el login es exitoso, guardamos el token automaticamente
     if (response.data.token) {
-        localStorage.setItem("Token", response.data.token);
+        localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data));
     }
 
@@ -19,14 +19,14 @@ export const login = async (email: string, password: string): Promise<LoginRespo
 }
 
 export const logout = () => {
-    localStorage.removeItem("Token");
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
     // Regirigir al usuario a la página de login
     window.location.href = "/login";
 }
 
 export const isAuthenticated = (): boolean => {
-    const token = localStorage.getItem("Token");
+    const token = localStorage.getItem("token");
     // Aqui podríamos agregar lógica adicional para verificar la validez del token
     return !!token;
 };

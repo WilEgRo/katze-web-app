@@ -23,6 +23,11 @@ export const getGatoById = async (id: string): Promise<Gato> => {
     return response.data;
 };
 
+export const getGatosAdoptados = async (): Promise<Gato[]> => {
+    const response = await apiClient.get('/gatos?estado=adoptado');
+    return response.data;
+};
+
 // [ADMIN] Crear un nuevo gato (requiere FormData por la foto)
 export const createGato = async (formData: FormData) => {
     const response = await apiClient.post('/gatos', formData);

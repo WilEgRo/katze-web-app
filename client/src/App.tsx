@@ -8,6 +8,8 @@ import DashboardPage from './pages/DashboardPage';
 import { useTheme } from './context/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import CreateGatoPage from './pages/CreateGatoPage';
+import Footer from './components/Footer';
+import GatoDetailPage from './pages/GatoDetailPage';
 
 // Creamos este componente "interno" para poder usar el hook useTheme
 // (No podemos usar useTheme directamente dentro de App porque App es el que tiene el Provider)
@@ -22,8 +24,8 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/adopta" element={<AdoptaPage />} />
+        <Route path="/adopta/:id" element={<GatoDetailPage />} />
         <Route path="/reportar" element={<ReportarPage />} />
-        <Route path="/admin/dashboard" element={<DashboardPage />} />
         <Route path="/login" element={<AdminLoginPage />} />
         <Route
           path="/admin/dashboard"
@@ -42,6 +44,7 @@ const AppContent = () => {
           }
         />
       </Routes>
+      <Footer />
     </div>
   );
 };
