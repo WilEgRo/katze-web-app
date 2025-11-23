@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="bg-white dark:bg-katze-dark-card border-t border-gray-200 dark:border-gray-800 pt-16 pb-8 transition-colors">
       <div className="container mx-auto px-8">
-        
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Columna 1: Marca */}
           <div className="space-y-4">
