@@ -56,7 +56,7 @@ const AppContent = () => {
             path="/admin/configuracion"
             element={
               <AdminRoute>
-                <div className="container mx-auto px-4 pt-28 pb-12">
+                <div className="container mx-auto px-4 pt-19 pb-12">
                   <ConfigManager />
                 </div>
               </AdminRoute>

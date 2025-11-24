@@ -28,11 +28,11 @@ const Hero = () => {
             </div>
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Buscar..."
               className="flex-grow bg-transparent px-4 py-2 outline-none text-gray-700 dark:text-white placeholder-gray-400 font-medium"
             />
             <button className="bg-katze-gold text-white font-bold py-3 px-8 rounded-full hover:bg-yellow-600 transition shadow-md">
-              Search
+              Buscar
             </button>
           </div>
         </div>
