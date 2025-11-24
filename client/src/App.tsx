@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import CreateGatoPage from './pages/CreateGatoPage';
 import Footer from './components/Footer';
 import GatoDetailPage from './pages/GatoDetailPage';
+import ScrollToTop from './components/ScrollToTop';
 
 // Creamos este componente "interno" para poder usar el hook useTheme
 // (No podemos usar useTheme directamente dentro de App porque App es el que tiene el Provider)
@@ -52,6 +53,7 @@ const AppContent = () => {
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <AppContent />
     </Router>
   );
