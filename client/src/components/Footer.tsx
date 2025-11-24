@@ -21,8 +21,8 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-gray-800 dark:text-white mb-6">Explorar</h4>
             <ul className="space-y-3 text-sm text-gray-500 dark:text-gray-400">
-              <li><a href="#" className="hover:text-katze-gold transition">Inicio</a></li>
-              <li><a href="#" className="hover:text-katze-gold transition">Adopciones</a></li>
+              <li><a href="/" className="hover:text-katze-gold transition">Inicio</a></li>
+              <li><a href="/adopta" className="hover:text-katze-gold transition">Adopciones</a></li>
               <li><a href="#" className="hover:text-katze-gold transition">Historias</a></li>
               <li><a href="#" className="hover:text-katze-gold transition">Voluntariado</a></li>
             </ul>
@@ -32,9 +32,9 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-gray-800 dark:text-white mb-6">Comunidad</h4>
             <ul className="space-y-3 text-sm text-gray-500 dark:text-gray-400">
-              <li><a href="#" className="hover:text-katze-gold transition">Reportar Perdido</a></li>
+              <li><a href="/reportar" className="hover:text-katze-gold transition">Reportar Perdido</a></li>
               <li><a href="#" className="hover:text-katze-gold transition">Blog Educativo</a></li>
-              <li><a href="#" className="hover:text-katze-gold transition">Donaciones</a></li>
+              <li><a href="/donar" className="hover:text-katze-gold transition">Donaciones</a></li>
               <li><a href="#" className="hover:text-katze-gold transition">Contacto</a></li>
             </ul>
           </div>

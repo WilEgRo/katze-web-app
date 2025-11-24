@@ -35,7 +35,7 @@ const HomePage = () => {
 
 
   return (
-    <div className="min-h-screen pb-20 bg-white dark:bg-gray-950 transition-colors">
+    <div className="min-h-screen pb-20 bg-white dark:bg-katze-dark transition-colors">
       
       {/* SECCIÓN 1: HERO */}
       <Hero />

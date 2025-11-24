@@ -13,6 +13,9 @@ import GatoDetailPage from './pages/GatoDetailPage';
 import ScrollToTop from './components/ScrollToTop';
 import DonarPage from './pages/DonarPage';
 import ConfigManager from './pages/Admin/ConfigManager';
+import ComunidadPage from './pages/ComunidadPage';
+import AdminRoute from './components/AdminRoute';
+import PerfilPage from './pages/PerfilPage';
 
 // Creamos este componente "interno" para poder usar el hook useTheme
 // (No podemos usar useTheme directamente dentro de App porque App es el que tiene el Provider)
@@ -24,41 +27,51 @@ const AppContent = () => {
     // Si theme es 'dark', usa 'bg-katze-dark' (negro). Si no, 'bg-white'.
     <div className={`min-h-screen font-sans transition-colors duration-300 ${theme === 'dark' ? 'bg-katze-dark' : 'bg-white'}`}>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/adopta" element={<AdoptaPage />} />
-        <Route path="/adopta/:id" element={<GatoDetailPage />} />
-        <Route path="/reportar" element={<ReportarPage />} />
-        <Route path="/login" element={<AdminLoginPage />} />
-        <Route path="/donar" element={<DonarPage />} />
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/crear-gato"
-          element={
-            <ProtectedRoute>
-              <CreateGatoPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/configuracion"
-          element={
-            <ProtectedRoute>
-              {/* Agregamos un div con padding-top (pt-28) para que el Navbar no tape el contenido */}
-              <div className="container mx-auto px-4 pt-28 pb-12">
-                <ConfigManager />
-              </div>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+      <div className='pt-24 md:pt-24'>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/adopta" element={<AdoptaPage />} />
+          <Route path="/adopta/:id" element={<GatoDetailPage />} />
+          <Route path="/reportar" element={<ReportarPage />} />
+          <Route path="/login" element={<AdminLoginPage />} />
+          <Route path="/donar" element={<DonarPage />} />
+          <Route path="/comunidad" element={<ComunidadPage />} />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <AdminRoute>
+                <DashboardPage />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/crear-gato"
+            element={
+              <AdminRoute>
+                <CreateGatoPage />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/configuracion"
+            element={
+              <AdminRoute>
+                <div className="container mx-auto px-4 pt-28 pb-12">
+                  <ConfigManager />
+                </div>
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/perfil"
+            element={
+              <ProtectedRoute>
+                <PerfilPage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </div>
       <Footer />
     </div>
   );

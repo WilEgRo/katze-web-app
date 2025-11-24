@@ -28,7 +28,7 @@ const GatoDetailPage = () => {
 
   // Mensaje predefinido para WhatsApp
   const mensajeWsp = `Hola, estoy interesado en adoptar a ${gato.nombre}, lo vi en la web de KATZE.`;
-  const linkWsp = `https://wa.me/59170000000?text=${encodeURIComponent(mensajeWsp)}`; // ¡Cambia el número!
+  const linkWsp = `https://wa.me/59179903823?text=${encodeURIComponent(mensajeWsp)}`;
 
   return (
     <div className="min-h-screen bg-white dark:bg-katze-dark transition-colors pb-20">

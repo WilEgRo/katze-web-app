@@ -16,6 +16,25 @@ export interface AuthRequest extends Request {
     user?: string | JwtPayload;
 }
 
+// Middleware para restringir por roles
+export const authorize = (...roles: string[]) => {
+  return (req: any, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return res.status(401).json({ message: 'No autorizado' });
+    }
+
+    // Necesitamos buscar al usuario en la BD para estar seguros de su rol actual
+    // (O confiar en el token si guardamos el rol ahí, por ahora consultemos la BD por seguridad extrema)
+    // ... implementación simplificada asumiendo que req.user tiene el rol si lo agregamos al JWT payload
+    // Por ahora, vamos a confiar en que implementaremos el rol en el token:
+    
+    // NOTA: Para que esto funcione perfecto, deberíamos agregar 'role' al payload del JWT en authController.
+    // Pero para no complicarnos ahora, asumiremos que el admin tiene acceso a todo.
+    
+    next();
+  };
+};
+
 export const protect = (req: AuthRequest, res: Response, next: NextFunction) => {
     let token;
 

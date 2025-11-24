@@ -53,7 +53,7 @@ export const loginRules = () => [
     
     body('password')
         .notEmpty()
-        .withMessage('La contrasena no puede estar vacia')
+        .withMessage('La contraseña no puede estar vacia')
         .trim(),
 ];
 

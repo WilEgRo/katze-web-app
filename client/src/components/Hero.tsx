@@ -4,7 +4,10 @@ const Hero = () => {
   return (
     <section className="w-full px-6 pb-20">
       {/* CAJA PRINCIPAL: Fondo gris en día, oscuro en noche, bordes redondeados */}
-      <div className="container mx-auto bg-gray-100 dark:bg-katze-dark-card rounded-[40px] p-10 md:p-20 flex flex-col md:flex-row items-center relative overflow-hidden transition-colors duration-300">
+      <div className="
+            container mx-auto 
+            bg-gray-100 border dark:border-katze-gold
+            dark:bg-katze-dark-card rounded-[40px] p-10 md:p-20 flex flex-col md:flex-row items-center relative overflow-hidden transition-colors duration-300">
 
         {/* COLUMNA IZQUIERDA (Texto) */}
         <div className="w-full md:w-1/2 z-10 space-y-8">

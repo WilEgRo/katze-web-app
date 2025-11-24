@@ -22,6 +22,7 @@ const DonarPage = () => {
             const selectedFile = e.target.files[0];
             setFile(selectedFile);
             setPreviewUrl(URL.createObjectURL(selectedFile));
+            console.log("que es: ", file);
         }
     };
 
@@ -40,7 +41,7 @@ const DonarPage = () => {
     };
 
     return (
-        <div className="pt-24 pb-12 px-6 flex flex-col items-center justify-center min-h-screen">
+        <div className="pt-22 pb-12 px-6 flex flex-col items-center justify-center min-h-screen">
 
             {/* SECCIÓN HERO (Imagen Gato Grande) */}
             <div className="relative mb-12 flex items-center justify-center group">

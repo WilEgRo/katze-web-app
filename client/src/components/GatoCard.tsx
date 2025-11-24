@@ -8,7 +8,7 @@ interface Props {
 
 const GatoCard = ({ gato }: Props) => {
     return (
-        <div className="bg-white dark:bg-katze-dark-card rounded-[30px] shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border border-gray-100 dark:border-gray-800 group">
+        <div className="bg-white dark:bg-katze-dark-card rounded-[30px] shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border border-gray-100 dark:border-katze-gold group">
             {/* IMAGEN DEL GATO */}
             <div className="relative h-64 overflow-hidden">
                 <img 

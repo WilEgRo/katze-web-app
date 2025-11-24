@@ -42,7 +42,8 @@ export const loginAdmin = async (req: Request, res: Response) => {
             message: "Login exitoso",
             token: token,
             userId: user._id,
-            email: user.email
+            email: user.email,
+            role: user.role,
         });
 
     } catch (error) {
@@ -52,7 +53,7 @@ export const loginAdmin = async (req: Request, res: Response) => {
 
 // ------- Funcion de registro (temporal) ------- //borrar temporal una vez concluido el desarrollo
 export const registerAdmin = async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     try {
         // Verificar si el usuario ya existe
@@ -68,7 +69,8 @@ export const registerAdmin = async (req: Request, res: Response) => {
         // Crear un nuevo usuario
         user = new User({
             email,
-            passwordHash
+            passwordHash,
+            role
         });
 
         await user.save();

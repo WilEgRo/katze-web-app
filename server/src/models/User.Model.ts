@@ -4,6 +4,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IUser extends Document {
     email: string;
     passwordHash: string;
+    role: 'USER' | 'ADMIN' | 'MODERADOR';
 }
 
 // Definir el esquema del usuario
@@ -18,6 +19,11 @@ const UserSchema: Schema = new Schema({
         type: String, 
         required: true 
     },
+    role: {
+        type: String,
+        enum: ['USER', 'ADMIN', 'MODERADOR'],
+        default: 'USER'
+    }
 }, {    
     timestamps: true 
 });

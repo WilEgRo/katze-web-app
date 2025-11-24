@@ -15,9 +15,15 @@ const AdminLoginPage = () => {
     setError('');
 
     try {
-      await login(formData.email, formData.password);
-      // Si funciona, redirigir al Dashboard
-      navigate('/admin/dashboard');
+      const userData = await login(formData.email, formData.password);
+
+      // verificar ROL para decidir el destino
+      if (userData.role === 'ADMIN' || userData.role === 'MODERADOR') {
+        navigate('/admin/dashboard');  
+      } else {
+        navigate('/perfil');
+      }
+      
     } catch (err: any) {
       setError('Credenciales incorrectas. Intenta de nuevo.');
     } finally {
@@ -27,10 +33,8 @@ const AdminLoginPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-katze-dark transition-colors px-4">
-      
-      <div className="w-full max-w-md bg-white dark:bg-katze-dark-card rounded-[30px] shadow-2xl p-8 md:p-12 border border-gray-100 dark:border-gray-800">
-        
-        <div className="text-center mb-8">
+      <div className="w-full max-w-md bg-white dark:bg-katze-dark-card rounded-[30px] shadow-2xl p-8 md:p-12 border border-gray-100 dark:border-katze-gold ">
+        <div className="text-center mb-8 ">
           <div className="inline-block p-4 rounded-full bg-katze-gold/10 mb-4">
             <FaCat className="text-4xl text-katze-gold" />
           </div>
