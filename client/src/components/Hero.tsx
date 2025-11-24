@@ -21,7 +21,7 @@ const Hero = () => {
             Únete a nuestra comunidad. Adopta, ayuda a un gato perdido o encuentra a tu nuevo mejor amigo hoy mismo.
           </p>
 
-          {/* BUSCADOR TIPO CÁPSULA (Igual a la imagen) */}
+          {/* BUSCADOR TIPO CÁPSULA (Igual a la imagen) 
           <div className="flex items-center bg-white dark:bg-black border border-gray-200 dark:border-gray-700 rounded-full p-2 shadow-sm w-full max-w-md">
             <div className="pl-4 text-gray-400">
               <FaSearch />
@@ -35,6 +35,7 @@ const Hero = () => {
               Buscar
             </button>
           </div>
+          */}
         </div>
 
         {/* COLUMNA DERECHA (Imagen) */}
