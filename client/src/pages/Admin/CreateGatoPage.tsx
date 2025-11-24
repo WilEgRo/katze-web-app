@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createGato } from '../services/gatoService';
+import { createGato } from '../../services/gatoService';
 import { FaCat, FaCamera, FaArrowLeft } from 'react-icons/fa';
 
 const CreateGatoPage = () => {
@@ -56,7 +56,7 @@ const CreateGatoPage = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-katze-dark transition-colors p-6">
       <div className="container mx-auto max-w-2xl">
         <button onClick={() => navigate('/admin/dashboard')} className="flex items-center gap-2 text-gray-500 mb-6 hover:text-katze-gold">
-          <FaArrowLeft /> Volver al Dashboard
+          <FaArrowLeft /> Volver al panel de control
         </button>
 
         <div className="bg-white dark:bg-katze-dark-card rounded-3xl shadow-xl p-8 border border-gray-100 dark:border-gray-800">

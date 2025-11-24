@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getAllReportesAdmin, updateReporteEstado, type Reporte } from '../services/reporteService';
-import { logout } from '../services/authService';
+import { getAllReportesAdmin, updateReporteEstado, type Reporte } from '../../services/reporteService';
+import { logout } from '../../services/authService';
 import { FaCheck, FaTimes, FaSignOutAlt, FaClock, FaHistory, FaCogs } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { FaPlus } from 'react-icons/fa';
