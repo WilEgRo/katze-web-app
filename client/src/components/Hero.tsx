@@ -2,7 +2,7 @@ import { FaSearch } from 'react-icons/fa';
 
 const Hero = () => {
   return (
-    <section className="w-full px-6 pb-20">
+    <section className="w-full px-6 pb-15">
       {/* CAJA PRINCIPAL: Fondo gris en día, oscuro en noche, bordes redondeados */}
       <div className="
             container mx-auto 
