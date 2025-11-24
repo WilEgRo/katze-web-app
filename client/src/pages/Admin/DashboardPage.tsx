@@ -62,7 +62,7 @@ const DashboardPage = () => {
         {/* ENCABEZADO */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-katze-gold font-serif">Panel de Control (MCP)</h1>
+            <h1 className="text-3xl font-bold text-katze-gold font-serif">Panel de Control</h1>
             <p className="text-gray-500 dark:text-gray-400">Administra los reportes de la comunidad.</p>
           </div>
 
