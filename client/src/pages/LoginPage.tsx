@@ -32,17 +32,17 @@ const AdminLoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-katze-dark transition-colors px-4">
+    <div className="min-h-screen flex items-start pt-24 justify-center bg-gray-50 dark:bg-katze-dark transition-colors px-4">
       <div className="w-full max-w-md bg-white dark:bg-katze-dark-card rounded-[30px] shadow-2xl p-8 md:p-12 border border-gray-100 dark:border-katze-gold ">
-        <div className="text-center mb-8 ">
+        <div className="text-center mb-8">
           <div className="inline-block p-4 rounded-full bg-katze-gold/10 mb-4">
             <FaCat className="text-4xl text-katze-gold" />
           </div>
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white font-serif">
-            Acceso Administrativo
+            Iniciar sesión
           </h1>
           <p className="text-gray-500 text-sm mt-2">
-            Ingresa tus credenciales para gestionar KATZE.
+            Ingresa tus credenciales.
           </p>
         </div>
 

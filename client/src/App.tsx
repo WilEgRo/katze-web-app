@@ -3,7 +3,7 @@ import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import AdoptaPage from './pages/AdoptaPage';
 import ReportarPage from './pages/ReportarPage';
-import AdminLoginPage from './pages/AdminLoginPage';
+import AdminLoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import { useTheme } from './context/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
