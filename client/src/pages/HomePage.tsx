@@ -22,7 +22,7 @@ const HomePage = () => {
         ]);
 
         //tomamos solo los 3 o 4 para no saturar al inicio
-        setHistorias(gatosData.slice(0, 3));
+        setHistorias(gatosData.slice(0, 4));
         setPerdidos(reportesData.slice(0, 4));
       } catch (error) {
         console.error("Error al cargar los datos de la HomePage:", error);
@@ -57,7 +57,7 @@ const HomePage = () => {
         {loading ? (
           <div className="text-center mt-10 text-gray-400">Cargando historias...</div>
         ) : historias.length > 0 ? (
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-5'>
             {historias.map(gato => (
               <GatoCard key={gato._id} gato={gato} />
             ))}
