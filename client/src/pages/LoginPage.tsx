@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../services/authService';
 import { FaCat, FaLock, FaEnvelope } from 'react-icons/fa';
+
 
 const AdminLoginPage = () => {
   const navigate = useNavigate();
@@ -87,6 +88,19 @@ const AdminLoginPage = () => {
           >
             {loading ? 'Entrando...' : 'Iniciar Sesión'}
           </button>
+          
+          {/* 👇 NUEVO: SECCIÓN DE REGISTRO */}
+          <div className="text-center mt-8 border-t border-gray-100 dark:border-gray-700 pt-6">
+            <p className="text-sm text-gray-500 mb-2">
+              ¿Eres nuevo en Katze?
+            </p>
+            <Link 
+              to="/register" 
+              className="inline-block border-2 border-katze-gold text-katze-gold font-bold py-2 px-6 rounded-full hover:bg-katze-gold hover:text-white transition text-sm"
+            >
+              Crear una cuenta
+            </Link>
+          </div>
 
         </form>
 

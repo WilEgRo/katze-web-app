@@ -1,6 +1,9 @@
-import { FaSearch } from 'react-icons/fa';
+import PopupReglas from "./popup";
+import { useState } from "react";
 
 const Hero = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <section className="w-full px-6 pb-15">
       {/* CAJA PRINCIPAL: Fondo gris en día, oscuro en noche, bordes redondeados */}
@@ -21,21 +24,11 @@ const Hero = () => {
             Únete a nuestra comunidad. Adopta, ayuda a un gato perdido o encuentra a tu nuevo mejor amigo hoy mismo.
           </p>
 
-          {/* BUSCADOR TIPO CÁPSULA (Igual a la imagen) 
-          <div className="flex items-center bg-white dark:bg-black border border-gray-200 dark:border-gray-700 rounded-full p-2 shadow-sm w-full max-w-md">
-            <div className="pl-4 text-gray-400">
-              <FaSearch />
-            </div>
-            <input
-              type="text"
-              placeholder="Buscar..."
-              className="flex-grow bg-transparent px-4 py-2 outline-none text-gray-700 dark:text-white placeholder-gray-400 font-medium"
-            />
-            <button className="bg-katze-gold text-white font-bold py-3 px-8 rounded-full hover:bg-yellow-600 transition shadow-md">
-              Buscar
+          <div>
+            <button className="bg-katze-gold text-white font-bold py-3 px-8 rounded-full hover:bg-yellow-600 transition shadow-md" onClick={() => setIsOpen(true)}>
+              ADOPTAR
             </button>
           </div>
-          */}
         </div>
 
         {/* COLUMNA DERECHA (Imagen) */}
@@ -52,6 +45,7 @@ const Hero = () => {
         </div>
 
       </div>
+      {isOpen && <PopupReglas onClose={() => setIsOpen(false)} />}
     </section>
   );
 };

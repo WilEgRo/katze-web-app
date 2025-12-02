@@ -16,6 +16,7 @@ import ConfigManager from './pages/Admin/ConfigManager';
 import ComunidadPage from './pages/ComunidadPage';
 import AdminRoute from './components/AdminRoute';
 import PerfilPage from './pages/PerfilPage';
+import RegisterPage from './pages/RegisterPage';
 
 // Creamos este componente "interno" para poder usar el hook useTheme
 // (No podemos usar useTheme directamente dentro de App porque App es el que tiene el Provider)
@@ -34,6 +35,7 @@ const AppContent = () => {
           <Route path="/adopta/:id" element={<GatoDetailPage />} />
           <Route path="/reportar" element={<ReportarPage />} />
           <Route path="/login" element={<AdminLoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/donar" element={<DonarPage />} />
           <Route path="/comunidad" element={<ComunidadPage />} />
           <Route

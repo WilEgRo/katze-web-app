@@ -2,17 +2,19 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaCat, FaSun, FaMoon, FaUserCircle, FaSignOutAlt } from 'react-icons/fa'; 
 import { useTheme } from '../context/ThemeContext';
+import PopupReglas from './popup';
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
   // estado para saber si el usuario hizo scroll
   const [isScrolled, setIsScrolled] = useState(false);
 
   // estado del usuario logeado
-  const [user, setUser] = useState<{email: string, role: string} | null>(null);
+  const [user, setUser] = useState<{ username: string, email: string, role: string} | null>(null);
 
   // detetar el escroll
   useEffect(() => {
@@ -67,7 +69,7 @@ const Navbar = () => {
           {/* Usamos 'hidden md:flex' para ocultarlo solo en celulares muy pequeños */}
           <div className="hidden md:flex items-center gap-10 text-sm font-bold text-gray-500 dark:text-gray-400">
             <Link to="/"className={isActive('/')}>Inicio</Link>
-            <Link to="/adopta" className={isActive('/adopta')}>Descubrir</Link>
+            <Link to="/adopta" className={isActive('/adopta')} onClick={() => setIsOpen(true)}>Descubrir</Link>
             <Link to="/comunidad" className={isActive('/comunidad')}>Comunidad</Link>
             <Link to="/donar" className={isActive('/donar')}>Ayudar</Link>
           </div>
@@ -86,7 +88,7 @@ const Navbar = () => {
               <div className={`flex items-center gap-3 pl-4 border-l border-gray-300 dark:border-gray-700 `}>
                 <div className="text-right hidden lg:block">
                   <p className="text-xs font-bold text-katze-gold uppercase">{user.role || 'Usuario'}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 max-w-[100px] truncate">{user.email}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 max-w-[100px] truncate">{user.username || user.email}</p>
                 </div>
                 
                 {/* Si es Admin o Moderador, clic en el icono lleva al Dashboard */}
@@ -106,6 +108,7 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
+      {isOpen && <PopupReglas onClose={() => setIsOpen(false)} />}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 // Definir la interfaz para el usuario
 export interface IUser extends Document {
+    username: string;
     email: string;
     passwordHash: string;
     role: 'USER' | 'ADMIN' | 'MODERADOR';
@@ -9,6 +10,12 @@ export interface IUser extends Document {
 
 // Definir el esquema del usuario
 const UserSchema: Schema = new Schema({
+    username: {
+      type: String,
+      required: true,
+      unique: true, // No puede haber dos usuarios con el mismo nombre
+      trim: true,
+    },
     email: { 
         type: String, 
         required: true, 

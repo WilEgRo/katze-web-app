@@ -3,6 +3,7 @@ import apiClient from "./apiClient";
 interface LoginResponse {
     token: string;
     userId: string;
+    username: string;
     email: string;
     role: string;
 }
@@ -31,3 +32,14 @@ export const isAuthenticated = (): boolean => {
     // Aqui podríamos agregar lógica adicional para verificar la validez del token
     return !!token;
 };
+
+export const register = async (username: string,email: string, password: string): Promise<LoginResponse> => {
+    const response = await apiClient.post('/auth/register', { username, email, password });
+    // Si el registro devuelve el token de una vez, iniciamos sesión automáticamente
+    if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data));
+    }
+    
+    return response.data;
+}

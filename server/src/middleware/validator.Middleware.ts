@@ -33,6 +33,11 @@ export const validate = (req: Request, res: Response, next: NextFunction) => {
 // REGLAS PARA AUTENTICACION DE ADMIN (Auth)
 //----------------------------------------------
 export const registerRules = () => [
+    body('username')
+        .notEmpty().withMessage('El nombre de usuario es obligatorio')
+        .isLength({ min: 3 }).withMessage('El usuario debe tener al menos 3 caracteres')
+        .trim()
+        .escape(),
     // body('email') le dice a express-validator que busque en el req.body
     body('email')
         .isEmail()
