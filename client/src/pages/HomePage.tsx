@@ -89,9 +89,9 @@ const HomePage = () => {
           ) : perdidos.length > 0 ? (
              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                {perdidos.map(reporte => (
-                 <div key={reporte._id} className="bg-white dark:bg-katze-dark-card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-300 group border border-gray-100 dark:border-gray-800">
+                 <div key={reporte._id} className="bg-white dark:bg-katze-dark-card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-300 group border border-red-600 ">
                    {/* Foto */}
-                   <div className="h-48 overflow-hidden relative">
+                   <div className="h-48 overflow-hidden relative ">
                      <img src={reporte.foto} alt="Gato Perdido" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
                      <div className="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider shadow-sm">
                        Perdido

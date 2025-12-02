@@ -33,3 +33,9 @@ export const createGato = async (formData: FormData) => {
     const response = await apiClient.post('/gatos', formData);
     return response.data;
 };
+
+// [ADMIN] Actualizar un gato existente
+export const updateGato = async (id: string, datos: Partial<Gato>) => {
+    const response = await apiClient.put(`/gatos/${id}`, datos);
+    return response.data;
+};
