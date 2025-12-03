@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getGatos, type Gato } from '../services/gatoService';
+import { getGatosEnAdopcion, type Gato, getGatosHogarTemporal } from '../services/gatoService';
 import GatoCard from '../components/GatoCard';
 
 const AdoptaPage = () => {
@@ -11,13 +11,16 @@ const AdoptaPage = () => {
   useEffect(() => {
     const fetchGatos = async () => {
       try {
-        const data = await getGatos(); // ¡Llamada al Backend!
-        setGatos(data);
+        const [enAdopcion, hogarTemporal] = await Promise.all([
+          getGatosEnAdopcion(),
+          getGatosHogarTemporal(),
+        ]);
+        setGatos([...enAdopcion, ...hogarTemporal]);
       } catch (err) {
         setError('Error al cargar los gatitos. Intenta de nuevo más tarde.');
         console.error(err);
       } finally {
-        setLoading(false);
+        setLoading(false); //
       }
     };
 

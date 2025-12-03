@@ -21,6 +21,7 @@ const DashboardPage = () => {
 
   // Cargar datos
   const fetchData = async () => {
+    console.log(loading);
     setLoading(true);
     setError('');
     try {
@@ -51,15 +52,15 @@ const DashboardPage = () => {
     } catch (e) { alert("Error al moderar reporte"); }
   };
 
-  // --- LÓGICA GATOS (NUEVO) ---
+  // --- LÓGICA GATOS ---
   const handleChangeGatoStatus = async (id: string, nuevoEstado: string) => {
     try {
-      // 1. Llamada al backend
+      // Llamada al backend
       // @ts-ignore (Si TypeScript se queja del string, aunque updateGato debería aceptar Partial<Gato>)
-      await updateGato(id, { estado: nuevoEstado });
+      await updateGato(id, { estado: nuevoEstado } as any);
       
-      // 2. Actualizar UI
-      // CORRECCIÓN AQUÍ: Usamos "as Gato['estado']" para decirle a TS que el string es válido
+      // Actualizar UI
+      // Usamos "as Gato['estado']" para decirle a TS que el string es válido
       setGatos(prev => prev.map(g => 
         g._id === id ? { ...g, estado: nuevoEstado as Gato['estado'] } : g 
       ));
@@ -224,7 +225,7 @@ const DashboardPage = () => {
                           `}
                         >
                           <option value="enAdopcion">En Adopción</option>
-                          <option value="adoptado">Adoptado 🏠</option>
+                          <option value="adoptado">Adoptado</option>
                           <option value="hogarTemporal">Hogar Temporal</option>
                         </select>
                       </td>

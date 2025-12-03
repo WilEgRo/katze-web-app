@@ -24,8 +24,21 @@ export const getGatoById = async (id: string): Promise<Gato> => {
 };
 
 export const getGatosAdoptados = async (): Promise<Gato[]> => {
-    const response = await apiClient.get('/gatos?estado=adoptado');
-    return response.data;
+    const response = await apiClient.get('/gatos');
+    const adoptados = response.data.filter((gato: Gato) => gato.estado === 'adoptado');
+    return adoptados;
+};
+
+export const getGatosEnAdopcion = async (): Promise<Gato[]> => {
+    const response = await apiClient.get('/gatos');
+    const enAdopcion = response.data.filter((gato: Gato) => gato.estado === 'enAdopcion');
+    return enAdopcion;
+};
+
+export const getGatosHogarTemporal = async (): Promise<Gato[]> => {
+    const response = await apiClient.get('/gatos');
+    const hogarTemporal = response.data.filter((gato: Gato) => gato.estado === 'hogarTemporal');
+    return hogarTemporal;
 };
 
 // [ADMIN] Crear un nuevo gato (requiere FormData por la foto)

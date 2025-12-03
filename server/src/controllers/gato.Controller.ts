@@ -11,7 +11,7 @@ import fs from 'fs';
  */
 export const getGatos = async (req: Request, res: Response) => {
     try {
-        const gatos = await Gato.find({ estado: 'enAdopcion' }); // mostrar solo gatos en adopcion
+        const gatos = await Gato.find().sort({ createdAt: -1 });
         res.status(200).json(gatos);
     } catch (error) {
         res.status(500).json({ message: "Error en el servidor al obtener los gatos", error });

@@ -19,7 +19,9 @@ const HomePage = () => {
         const [gatosData, reportesData] = await Promise.all([
           getGatosAdoptados(),
           getReportesPublicos()
+          
         ]);
+        console.log("Gatos Adoptados recibidos:", gatosData);
 
         //tomamos solo los 3 o 4 para no saturar al inicio
         setHistorias(gatosData.slice(0, 4));

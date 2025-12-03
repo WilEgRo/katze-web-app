@@ -7,8 +7,14 @@ interface Props {
 }
 
 const GatoCard = ({ gato }: Props) => {
+    const isAdoptado = gato.estado === 'adoptado';
+
+    const badgeColor = isAdoptado ? 'bg-green-500' : 'bg-katze-gold';
+    const badgeText = isAdoptado ? 'Adoptado' : (gato.estado === 'enAdopcion' ? 'Adóptame' : gato.estado);
+    const badBorder = isAdoptado ? 'border-green-500' : 'border-katze-gold';
+
     return (
-        <div className="bg-white dark:bg-katze-dark-card rounded-[30px] shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border border-gray-100 dark:border-katze-gold group">
+        <div className={`bg-white dark:bg-katze-dark-card rounded-[30px] shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border ${badBorder} group`}>
             {/* IMAGEN DEL GATO */}
             <div className="relative h-64 overflow-hidden">
                 <img 
@@ -17,8 +23,8 @@ const GatoCard = ({ gato }: Props) => {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 {/* Badge de Estado */}
-                <div className="absolute top-4 right-4 bg-katze-gold text-white text-xs font-bold px-3 py-1 rounded-full shadow-md uppercase tracking-wide">
-                    {gato.estado === 'enAdopcion' ? 'Adóptame' : gato.estado}
+                <div className={`absolute top-4 right-4 ${badgeColor} text-white text-xs font-bold px-3 py-1 rounded-full shadow-md uppercase tracking-wide`}>
+                    {isAdoptado} {badgeText}
                 </div>
             </div>
 
@@ -48,9 +54,14 @@ const GatoCard = ({ gato }: Props) => {
                 {/* BOTÓN DE ACCIÓN */}
                 <Link 
                     to={`/adopta/${gato._id}`} 
-                    className="block w-full text-center border-2 border-katze-gold text-katze-gold font-bold py-2 rounded-full hover:bg-katze-gold hover:text-white transition duration-300"
+                    className={`block w-full text-center border-2 font-bold py-2 rounded-full transition duration-300
+                        ${isAdoptado 
+                            ? 'border-green-500 text-green-500 hover:bg-green-500 hover:text-white' 
+                            : 'border-katze-gold text-katze-gold hover:bg-katze-gold hover:text-white'
+                        }
+                    `}
                 >
-                    Ver Historia
+                    {isAdoptado ? 'Leer final Feliz' : 'Adoptar'}
                 </Link>
             </div>
         </div>
