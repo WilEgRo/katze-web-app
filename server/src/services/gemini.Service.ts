@@ -5,8 +5,17 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const apiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
+if (!apiKey) {
+    throw new Error("La clave API de Google Generative AI no está configurada.");
+}
+
+
 // Iniciamos Gemini
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY ?? "");
+const genAI = new GoogleGenerativeAI(apiKey);
+
+//funcion de espera
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Convierte imagen local a base64
 function fileToGenerativePart(path: string, mimeType: string) {
@@ -19,30 +28,47 @@ function fileToGenerativePart(path: string, mimeType: string) {
 }
 
 export const analizarImagenGato = async (rutaImagen: string): Promise<boolean> => {
-    try {
-        // Usamos el modelo Flash (rápido y económico)
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const maxIntentos = 3;
+    let intentos = 0;
 
-        const prompt = "Actúa como un filtro estricto. Analiza esta imagen. Responde SOLAMENTE con la palabra 'SI' si la imagen contiene un gato real (felino doméstico). Responde 'NO' si es un perro, un dibujo, un peluche, una persona o si la imagen no es clara. No des explicaciones.";
+    while (intentos < maxIntentos) {
+        try {
+            // Usamos el modelo Flash (rápido y económico)
+            const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-        const imagePart = fileToGenerativePart(rutaImagen, "image/jpeg");
+            const prompt = "Actúa como un filtro estricto. Analiza esta imagen. Responde SOLAMENTE con la palabra 'SI' si la imagen contiene un gato real (felino doméstico). Responde 'NO' si es un perro, un dibujo, un peluche, una persona o si la imagen no es clara. No des explicaciones.";
 
-        console.log("Consultando a Gemini sobre la imagen...");
-        
-        const result = await model.generateContent([
-            { text: prompt },
-            imagePart
-        ]);
+            const imagePart = fileToGenerativePart(rutaImagen, "image/jpeg");
 
-        const text = result.response.text().trim().toUpperCase();
+            console.log("Consultando a Gemini sobre la imagen...");
+            
+            const result = await model.generateContent([
+                { text: prompt },
+                imagePart
+            ]);
 
-        console.log(`Veredicto de Gemini: ${text}`);
+            const response = await result.response; // Esperamos a que la respuesta esté lista
+            const text = response.text().trim().toUpperCase();
+            
+            console.log(`🤖 Intento ${intentos + 1}: Veredicto ${text}`);
 
-        return text === "SI";
+           return text.includes("SI");
 
-    } catch (error) {
-        console.error("Error en el servicio de Gemini:", error);
-        // Si falla la IA, devolvemos false por seguridad (o true si para revisión humana)
-        return false;
+        } catch (error: any) {
+            if (error.message && error.message.includes("503")) {
+                intentos++;
+                console.warn(`⚠️ Servidor ocupado (503). Reintentando (${intentos}/${maxIntentos})...`);
+                await delay(2000); // Esperamos 2 segundos antes de reintentar
+                continue;
+            }
+
+            // Si es otro error (o se acabaron los intentos), fallamos de verdad
+            console.error("❌ Error definitivo en Gemini:", error);
+            
+            // IMPORTANTE: Aquí podrías lanzar el error hacia arriba para que el Controller
+            // le diga al usuario "Error de servidor" en vez de "No es un gato".
+            throw error;
+        }
     }
+    return false; // Si agotamos los intentos, asumimos que no es un gato
 };

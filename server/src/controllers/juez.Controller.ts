@@ -31,6 +31,7 @@ export const evaluarGato = async (req: Request, res: Response) => {
             if (fs.existsSync(rutaLocal)) fs.unlinkSync(rutaLocal);
         } catch (e) { console.error("No se pudo borrar temporal:", e); }
 
+
         // Decisión basada en el análisis
         if (!esGato) {
         console.log("RECHAZADO: La IA dice que no es un gato.");
@@ -50,6 +51,6 @@ export const evaluarGato = async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Error en juez:", error);
         if (rutaLocal && fs.existsSync(rutaLocal)) fs.unlinkSync(rutaLocal);
-        return res.status(500).json({ mensaje: "Error interno del servidor" });
+        return res.status(500).json({mensaje: "El servicio de IA está saturado temporalmente. Intenta de nuevo en unos segundos."});
     }
 };
