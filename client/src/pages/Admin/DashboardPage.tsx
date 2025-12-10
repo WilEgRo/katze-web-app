@@ -23,6 +23,7 @@ const DashboardPage = () => {
 
   // Cargar datos
   const fetchData = async () => {
+    console.log(`cargando datos para el panel de admin... ${loading}`);
     setLoading(true);
     setError('');
     try {
