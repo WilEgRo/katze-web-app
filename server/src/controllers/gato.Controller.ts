@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Gato, {IGato} from "../models/Gato.Model";
+import Gato from "../models/Gato.Model";
 import { UploadedFile } from "express-fileupload";
 import cloudinary from "../config/cloudinary";
 import fs from 'fs';

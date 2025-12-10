@@ -1,6 +1,7 @@
-import { Request, Response } from 'express';
+import e, { Request, Response } from 'express';
 import Solicitud from '../models/Solicitud.Model';
 import Gato from '../models/Gato.Model';
+import axios from 'axios';
 
 // Solicitud publica
 export const crearSolicitud = async (req: Request, res: Response) => {
@@ -13,6 +14,13 @@ export const crearSolicitud = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Gato no encontrado' });
         }
 
+        // auto.rechazo pre-filtro
+        let estadoInicial = 'pendiente';
+        // si es departamento y tiene más de 2 hijos
+        if (vivienda === 'departamento' && parseInt(cantidadNiños) > 2) {
+            estadoInicial = 'rechazada';
+        }
+
         const nuevaSolicitud = new Solicitud({
             gatoId,
             nombreSolicitante,
@@ -23,14 +31,29 @@ export const crearSolicitud = async (req: Request, res: Response) => {
             tieneMallas,
             tienePatio,
             tieneNiños,
-            cantidadNiños,
-            otrasMascotas
+            cantidadNiños: cantidadNiños || 0,
+            otrasMascotas,
+            estado: estadoInicial
         });
         await nuevaSolicitud.save();
 
-        
         // Incrementar el contador de solicitudes del gato
         await Gato.findByIdAndUpdate(gatoId, { $inc: { solicitudesCount: 1 } });
+
+        // disparador a make 
+        try {
+            axios.post('https://hook.us2.make.com/fabgtkv45jni3lf8fic9hclicqywd7n3', {
+                id: nuevaSolicitud._id,
+                nombre: req.body.nombreSolicitante,
+                email: req.body.email,
+                vivienda: req.body.vivienda,
+                hijos: req.body.cantidadNiños || 0,
+                motivo: req.body.motivo,
+                estado: estadoInicial
+            });
+        } catch (error) {
+            console.error('Error al enviar datos a Make:', error);
+        }
         
         res.status(201).json({ message: 'Solicitud enviada con éxito', solicitud: nuevaSolicitud });
     } catch (error) {
