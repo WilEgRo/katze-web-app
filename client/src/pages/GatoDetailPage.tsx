@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getGatoById, type Gato } from '../services/gatoService';
-import { FaArrowLeft, FaHeart, FaWhatsapp, FaMapMarkerAlt, FaSyringe, FaPaw } from 'react-icons/fa';
+import { FaArrowLeft, FaMapMarkerAlt, FaSyringe, FaPaw } from 'react-icons/fa';
+import SolicitudPopup from '../components/SolicitudPopup';
 
 const GatoDetailPage = () => {
   const { id } = useParams(); // Obtenemos el ID de la URL
@@ -23,12 +24,10 @@ const GatoDetailPage = () => {
     fetchGato();
   }, [id]);
 
+  const [showPopup, setShowPopup] = useState(false);
+
   if (loading) return <div className="min-h-screen flex items-center justify-center text-katze-gold">Cargando perfil...</div>;
   if (!gato) return <div className="min-h-screen flex items-center justify-center text-gray-500">Gato no encontrado.</div>;
-
-  // Mensaje predefinido para WhatsApp
-  const mensajeWsp = `Hola, estoy interesado en adoptar a ${gato.nombre}, lo vi en la web de KATZE.`;
-  const linkWsp = `https://wa.me/59179903823?text=${encodeURIComponent(mensajeWsp)}`;
 
   return (
     <div className="min-h-screen bg-white dark:bg-katze-dark transition-colors pb-20">
@@ -99,18 +98,20 @@ const GatoDetailPage = () => {
                 Dale a {gato.nombre} el hogar que siempre soñó. El proceso es gratuito y guiado.
               </p>
               
-              <a 
-                href={linkWsp} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-full text-center bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-green-500/30 transition transform hover:-translate-y-1 mb-4 flex items-center justify-center gap-2"
+              <button 
+                onClick={() => setShowPopup(true)} 
+                className="w-full text-center bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:-translate-y-1 mb-4 flex items-center justify-center gap-2"
               >
-                <FaWhatsapp className="text-xl" /> Solicitar Adopción
-              </a>
-              
-              <button className="w-full text-center border-2 border-katze-gold text-katze-gold font-bold py-3 rounded-xl hover:bg-katze-gold hover:text-white transition flex items-center justify-center gap-2">
-                <FaHeart /> Guardar en Favoritos
+                <FaPaw /> Quiero Adoptarlo
               </button>
+              
+              {showPopup && gato && (
+                <SolicitudPopup 
+                  gatoId={gato._id} 
+                  gatoNombre={gato.nombre}
+                  onClose={() => setShowPopup(false)} 
+                />
+              )}
             </div>
           </div>
 
