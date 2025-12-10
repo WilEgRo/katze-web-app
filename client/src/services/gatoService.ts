@@ -9,6 +9,7 @@ export interface Gato {
     caracter: string;
     estadoSalud: string;
     estado: 'enAdopcion' | 'adoptado' | 'hogarTemporal' | 'perdido';
+    solicitudesCount: number;
 }
 
 // Funcion para obtener todos los gatos publicos

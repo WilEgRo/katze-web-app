@@ -9,6 +9,7 @@ export interface IGato extends Document {
     caracter: string;
     estadoSalud: string;
     estado: string; // 'enAdopcion', 'adoptado', 'hogarTemporal'
+    solicitudesCount: number;
 }
 
 // Definir el esquema del gato
@@ -42,6 +43,10 @@ const GatoSchema: Schema = new Schema({
       required: true,
       enum: ['enAdopcion', 'adoptado', 'hogarTemporal', 'perdido'],
       default: 'enAdopcion',
+    },
+    solicitudesCount: { 
+        type: Number, 
+        default: 0 
     },
   },
   {

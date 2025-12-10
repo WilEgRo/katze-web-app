@@ -7,6 +7,12 @@ export const crearSolicitud = async (req: Request, res: Response) => {
     try {
         const { gatoId, nombreSolicitante, telefono, email, motivo, vivienda, tieneMallas, tienePatio, tieneNiños, cantidadNiños, otrasMascotas } = req.body;
 
+        // verificar que el gato exista
+        const gato = await Gato.findById(gatoId);
+        if (!gato) {
+            return res.status(404).json({ message: 'Gato no encontrado' });
+        }
+
         const nuevaSolicitud = new Solicitud({
             gatoId,
             nombreSolicitante,
@@ -21,6 +27,11 @@ export const crearSolicitud = async (req: Request, res: Response) => {
             otrasMascotas
         });
         await nuevaSolicitud.save();
+
+        
+        // Incrementar el contador de solicitudes del gato
+        await Gato.findByIdAndUpdate(gatoId, { $inc: { solicitudesCount: 1 } });
+        
         res.status(201).json({ message: 'Solicitud enviada con éxito', solicitud: nuevaSolicitud });
     } catch (error) {
         res.status(500).json({ message: 'Error al enviar solicitud' });
