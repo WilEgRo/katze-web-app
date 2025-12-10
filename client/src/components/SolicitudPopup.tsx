@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FaTimes, FaPaw, FaPaperPlane } from 'react-icons/fa';
-import { createSolicitud } from '../services/SolicitudService';
+import { createSolicitud } from '../services/solicitud.Service';
 
 interface Props {
   gatoId: string;

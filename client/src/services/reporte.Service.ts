@@ -1,4 +1,4 @@
-import apiClient from "./apiClient";
+import apiClient from "./apiClient.Service";
 
 export interface Reporte {
     _id: string;

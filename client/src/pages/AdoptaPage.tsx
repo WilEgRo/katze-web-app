@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getGatos, type Gato } from '../services/gatoService'; // Usamos getGatos para traer todo y filtrar aquí
+import { getGatos, type Gato } from '../services/gato.Service'; // Usamos getGatos para traer todo y filtrar aquí
 import GatoCard from '../components/GatoCard';
 import { FaSearch } from 'react-icons/fa';
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getGatoById, type Gato } from '../services/gatoService';
+import { getGatoById, type Gato } from '../services/gato.Service';
 import { FaArrowLeft, FaMapMarkerAlt, FaSyringe, FaPaw } from 'react-icons/fa';
 import SolicitudPopup from '../components/SolicitudPopup';
 

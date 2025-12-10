@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createGato } from '../../services/gatoService';
+import { createGato } from '../../services/gato.Service';
 import { FaCat, FaCamera, FaArrowLeft } from 'react-icons/fa';
 
 const CreateGatoPage = () => {

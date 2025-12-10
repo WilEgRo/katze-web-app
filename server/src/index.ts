@@ -8,6 +8,7 @@ import reporteRoutes from './routes/reporte.Routes';
 import fileUpload = require('express-fileupload');
 import configRoutes from './routes/config.Routes';
 import solicitudRoutes from './routes/solicitud.Routes';
+import juezRoutes from "./routes/juez.Routes";
 
 //cargar variables de entorno
 dotenv.config();
@@ -33,6 +34,7 @@ app.use('/api/gatos', gatoRoutes); //→ Rutas de gestión de gatos
 app.use('/api/reportes', reporteRoutes); //→ Rutas de gestión de reportes
 app.use('/api/config', configRoutes); // rutas cambiar qr de donaciones y foto del gato
 app.use('/api/solicitudes', solicitudRoutes); //→ Rutas de gestión de solicitudes de adopción
+app.use("/api/MCP", juezRoutes); //→ Rutas del juez de gatos
 
 // Rutas de ejemplo
 app.get('/', (req: Request, res: Response) => {
@@ -42,4 +44,4 @@ app.get('/', (req: Request, res: Response) => {
 // Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+}); 

@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { login } from '../services/authService';
+import { login } from '../services/auth.Service';
 import { FaCat, FaLock, FaEnvelope } from 'react-icons/fa';
 
 

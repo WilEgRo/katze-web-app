@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAllReportesAdmin, updateReporteEstado, type Reporte } from '../../services/reporteService';
-import { getGatos, updateGato, type Gato } from '../../services/gatoService';
-import { logout } from '../../services/authService';
-import { getSolicitudesAdmin, updateSolicitudEstado, type Solicitud } from '../../services/SolicitudService';
+import { getAllReportesAdmin, updateReporteEstado, type Reporte } from '../../services/reporte.Service';
+import { getGatos, updateGato, type Gato } from '../../services/gato.Service';
+import { logout } from '../../services/auth.Service';
+import { getSolicitudesAdmin, updateSolicitudEstado, type Solicitud } from '../../services/solicitud.Service';
 import { FaCheck, FaTimes, FaSignOutAlt, FaClock, FaHistory, FaCogs, FaCat, FaPlus, FaBullhorn, FaEnvelopeOpenText, FaUser, FaHome, FaPhone, FaUserTie, FaUsers } from 'react-icons/fa';
 
 const DashboardPage = () => {

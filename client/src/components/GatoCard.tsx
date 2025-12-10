@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { FaPaw } from "react-icons/fa";
-import { type Gato } from "../services/gatoService";
+import { type Gato } from "../services/gato.Service";
 
 interface Props {
     gato: Gato;

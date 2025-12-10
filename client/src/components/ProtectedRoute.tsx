@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { isAuthenticated } from '../services/authService';
+import { isAuthenticated } from '../services/auth.Service';
 import { type ReactNode } from 'react';
 
 interface Props {

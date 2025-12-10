@@ -2,8 +2,8 @@ import Hero from '../components/Hero';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import GatoCard from '../components/GatoCard';
-import { getGatosAdoptados, type Gato } from '../services/gatoService';
-import { getReportesPublicos, type Reporte } from '../services/reporteService';
+import { getGatosAdoptados, type Gato } from '../services/gato.Service';
+import { getReportesPublicos, type Reporte } from '../services/reporte.Service';
 import { FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
 
 const HomePage = () => {
@@ -81,7 +81,7 @@ const HomePage = () => {
               </h2>
               <p className="text-katze-gold font-medium">Gatos reportados recientemente</p>
             </div>
-            <Link to="/reportar" className="hidden md:block text-sm font-bold text-gray-500 hover:text-katze-gold transition underline">
+            <Link to="/comunidad" className="hidden md:block text-sm font-bold text-gray-500 hover:text-katze-gold transition underline">
               Ver todos los reportes
             </Link>
           </div>

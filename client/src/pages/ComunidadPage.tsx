@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getReportesPublicos, type Reporte } from '../services/reporteService';
+import { getReportesPublicos, type Reporte } from '../services/reporte.Service';
 import { FaBullhorn, FaSearchLocation, FaHeart } from 'react-icons/fa';
 
 const ComunidadPage = () => {

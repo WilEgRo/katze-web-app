@@ -1,6 +1,8 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
-import { createReporte } from '../services/reporteService';
+import { createReporte } from '../services/reporte.Service';
 import { FaCamera, FaMapMarkerAlt, FaPhone, FaCat, FaCalendarAlt } from 'react-icons/fa';
+import { validarImagenGato } from '../services/juez.Service';
+import { toast } from 'react-hot-toast';
 
 const ReportarPage = () => {
   // Estado del formulario
@@ -46,7 +48,19 @@ const ReportarPage = () => {
       return;
     }
 
+    // variable para guardar el ID de la notiq de carga
+    let toastId;
+
     try {
+      // validacion con MCP local
+      toastId = toast.loading('Validando reporte con el MCP local...');
+
+      await validarImagenGato(foto);
+
+      toast.dismiss(toastId);
+      toast.success('Reporte validado por el MCP local.');
+
+      // guardar el reporte normalmente
       // Crear objeto FormData para enviar archivo + datos
       const data = new FormData();
       data.append('nombreGato', formData.nombreGato);
@@ -63,16 +77,30 @@ const ReportarPage = () => {
       setFormData({ nombreGato: '', descripcion: '', zona: '', contacto: '', fecha: '' });
       setFoto(null);
       setPreview(null);
+
     } catch (err: any) {
+        // quitamos el toast de carga
+        if (toastId) toast.dismiss(toastId);
+
         // Mostrar el error que viene del backend si existe
         console.error("Error detallado: ", err);
         
-        if (err.response && err.response.data) {
-          console.error("Respuesta del servidor: ", err.response.data);
+        let mensajeError = 'Error al validar el reporte.';
+        // si el error es de axios y tiene respuesta del servidor
+        if (err.response) {
+          // si es 400 sabemos que es un error del usuario
+          if (err.response.status === 400 && err.response.data.mensaje) {
+            mensajeError = err.response.data.mensaje;
+            toast.error("Imagen rechazada por la IA: " + mensajeError);
+          }else{
+            mensajeError = 'Error del servidor: ' + (err.response.data.mensaje || 'Inténtalo de nuevo más tarde.');
+            toast.error(mensajeError);
+          }
+        } else {
+          mensajeError = 'No se pudo conectar con el servidor. Inténtalo de nuevo más tarde.';
         }
 
-        const msg = err.response?.data?.message || 'Error al enviar el reporte.';
-        setError(msg);
+        setError(mensajeError);
 
     } finally {
       setLoading(false);

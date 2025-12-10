@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { register } from '../services/authService';
+import { register } from '../services/auth.Service';
 import { FaLock, FaEnvelope, FaUserPlus, FaUser } from 'react-icons/fa';
 
 const RegisterPage = () => {
