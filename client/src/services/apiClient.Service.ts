@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Variables de entorno
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 // configurar la url del server
 const apiClient = axios.create({
