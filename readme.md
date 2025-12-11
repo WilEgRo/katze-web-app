@@ -222,10 +222,9 @@ cd katze-web-app
     CLOUDINARY_API_SECRET=tu_api_secret
 
     # Make Webhooks (Opcional si no vas a usar automatización aún)
-    MAKE_WEBHOOK_NUEVA_SOLICITUD=[https://hook.eu1.make.com/](https://hook.eu1.make.com/)...
-    MAKE_WEBHOOK_SOLICITUD_APROBADA=[https://hook.eu1.make.com/](https://hook.eu1.make.com/)...
-    MAKE_WEBHOOK_NUEVO_GATO=[https://hook.eu1.make.com/](https://hook.eu1.make.com/)...
-    MAKE_WEBHOOK_VISION=[https://hook.eu1.make.com/](https://hook.eu1.make.com/)...
+    GOOGLE_API_KEY=tu_gemini_api_key
+
+    
 ```
 
 -   Inicia el servidor en modo desarrollo:
