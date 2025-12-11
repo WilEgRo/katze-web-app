@@ -8,7 +8,7 @@ export interface Reporte {
     contacto: string;
     foto: string;
     fecha: string;
-    estado: 'pendiente' | 'aprobado' | 'rechazado';
+    estado: 'pendiente' | 'aprobado' | 'rechazado' | 'encontrado';
 }
 
 // funcion para enviar un nuevo reporte con foto
@@ -23,6 +23,11 @@ export const getReportesPublicos = async (): Promise<Reporte[]> => {
     const response = await apiClient.get('/reportes');
     return response.data;
 }
+// funcion para obtener un reporte por su ID
+export const getReporteById = async (id: string): Promise<Reporte> => {
+    const response = await apiClient.get(`/reportes/${id}`);
+    return response.data;
+};
 
 // [ADMIN] funcion para obtener todos los reportes (incluyendo pendientes, Aprobados y rechazados)
 export const getAllReportesAdmin = async (): Promise<Reporte[]> => {
@@ -33,5 +38,15 @@ export const getAllReportesAdmin = async (): Promise<Reporte[]> => {
 // [ADMIN] funcion para actualizar el estado de un reporte
 export const updateReporteEstado = async (id: string, estado: 'aprobado' | 'rechazado') => {
     const response = await apiClient.put(`/reportes/admin/${id}`, { estado });
+    return response.data;
+};
+
+export const getMisReportes = async (): Promise<Reporte[]> => {
+    const response = await apiClient.get('/reportes/user/mis-reportes');
+    return response.data;
+};
+
+export const marcarComoEncontrado = async (id: string) => {
+    const response = await apiClient.put(`/reportes/user/${id}/encontrado`);
     return response.data;
 };

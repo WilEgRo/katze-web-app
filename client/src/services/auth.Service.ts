@@ -8,6 +8,14 @@ interface LoginResponse {
     role: string;
 }
 
+export interface User {
+    _id: string;
+    username: string;
+    email: string;
+    role: 'USER' | 'ADMIN' | 'MODERADOR';
+    createdAt: string;
+}
+
 export const login = async (email: string, password: string): Promise<LoginResponse> => {
     const response = await apiClient.post('/auth/login', { email, password });
 
@@ -29,7 +37,6 @@ export const logout = () => {
 
 export const isAuthenticated = (): boolean => {
     const token = localStorage.getItem("token");
-    // Aqui podríamos agregar lógica adicional para verificar la validez del token
     return !!token;
 };
 
@@ -43,3 +50,13 @@ export const register = async (username: string,email: string, password: string)
     
     return response.data;
 }
+
+export const getAllUsers = async (): Promise<User[]> => {
+    const response = await apiClient.get('/auth/users');
+    return response.data;
+};
+
+export const updateUserRole = async (id: string, role: string) => {
+    const response = await apiClient.put(`/auth/users/${id}/role`, { role });
+    return response.data;
+};

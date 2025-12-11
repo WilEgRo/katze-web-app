@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import CreateGatoPage from './pages/Admin/CreateGatoPage';
 import Footer from './components/Footer';
 import GatoDetailPage from './pages/GatoDetailPage';
+import GatoPerdidoDetailPage from './pages/GatoPerdidoDetailPage';
 import ScrollToTop from './components/ScrollToTop';
 import DonarPage from './pages/DonarPage';
 import ConfigManager from './pages/Admin/ConfigManager';
@@ -34,12 +35,15 @@ const AppContent = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/adopta" element={<AdoptaPage />} />
           <Route path="/adopta/:id" element={<GatoDetailPage />} />
+          <Route path="/reporte/:id" element={<GatoPerdidoDetailPage />} />
           <Route path="/reportar" element={<ReportarPage />} />
           <Route path="/login" element={<AdminLoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/donar" element={<DonarPage />} />
           <Route path="/comunidad" element={<ComunidadPage />} />
           <Route path="*" element={<NotFoundPage />} />
+          
+          {/* RUTAS PROTEGIDAS */}
           <Route
             path="/admin/dashboard"
             element={

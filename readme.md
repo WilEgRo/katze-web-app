@@ -99,6 +99,7 @@ katze-web-app/
 │   │   │   ├── ComunidadPage.tsx
 │   │   │   ├── DonarPage.tsx
 │   │   │   ├── GatoDetailPage.tsx
+│   │   │   ├── GatoPerdidoDetailPage.tsx
 │   │   │   ├── HomePage.tsx
 │   │   │   ├── LoginPage.tsx
 │   │   │   ├── NotFoundPage.tsx
@@ -223,8 +224,6 @@ cd katze-web-app
 
     # Make Webhooks (Opcional si no vas a usar automatización aún)
     GOOGLE_API_KEY=tu_gemini_api_key
-
-    
 ```
 
 -   Inicia el servidor en modo desarrollo:

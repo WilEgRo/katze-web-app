@@ -22,8 +22,10 @@ export const createSolicitud = async (datos: any) => {
     return response.data;
 };
 
-export const getSolicitudesAdmin = async (): Promise<Solicitud[]> => {
-    const response = await apiClient.get('/solicitudes/admin/all');
+export const getSolicitudesAdmin = async (search?: string): Promise<Solicitud[]> => {
+    // Si hay búsqueda, la enviamos como query params: ?search=Nombre
+    const url = search ? `/solicitudes/admin/all?search=${encodeURIComponent(search)}` : '/solicitudes/admin/all';
+    const response = await apiClient.get(url);
     return response.data;
 };
 

@@ -4,43 +4,51 @@ import {
     getReportesAprobados,
     getAllReportesAdmin,
     updateReporteEstado,
-    deleteReporte
+    deleteReporte,
+    getMisReportes,
+    marcarComoEncontrado,
+    getReporteById
 } from "../controllers/reporte.Controller";
 import {
     reporteRules,
     validate
 } from "../middleware/validator.Middleware";
-import { protect } from "../middleware/auth.Middleware";
+import { protect, authorize } from "../middleware/auth.Middleware";
 
 const router = Router(); // crear el router que maneje las rutas
 
-// ----------------------------
-// Ruta Publicas 
-// ----------------------------
-// GET /api/reportes
+// ==========================================
+// RUTAS PÚBLICAS
+// ==========================================
 // obtiene solo los reportes que un admin ya aprobo
 router.get("/", getReportesAprobados);
+router.get("/:id", getReporteById);
 
-// POST /api/reportes
-// Permite a cualquier usuario crear un nuevo reporte (que nacera como pendiente)
-// pasara por las reglas de validacion (reporteRules) y luego por el validador (validate)
-// si todo esta bien, llegara al controlador "createReportePerdido"
-router.post("/", reporteRules(), validate, createReportePerdido);
 
-//----------------------------
-// Rutas Privadas - Admin
-//----------------------------
-// Get /api/reportes/admin/all
-// obtiene todos los reportes (pendientes, aprobados, rechazados, etc)
-router.get("/admin/all", protect, getAllReportesAdmin);
+// ==========================================
+// RUTAS DE USUARIO (Requiere Login)
+// ==========================================
+// Crear un reporte
+router.post("/", reporteRules(), protect, validate, createReportePerdido);
 
-// PUT /api/reportes/admin/:id
-// permite actualizar el estado de un reporte (aprobar/rechazar)
-router.put("/admin/:id", protect, updateReporteEstado);
+// Ver mis propios reportes
+router.get("/user/mis-reportes", protect, getMisReportes);
 
-// DELETE /api/reportes/admin/:id
-// permite eliminar un reporte
-router.delete("/admin/:id", protect, deleteReporte);
+// Marcar MI reporte como encontrado
+router.put("/user/:id/encontrado", protect, marcarComoEncontrado);
+
+
+// ==========================================
+// RUTAS DE ADMIN/MOD (Requiere Permisos)
+// ==========================================
+// Ver TODOS los reportes (incluido pendientes y rechazados)
+router.get("/admin/all", protect, authorize("ADMIN", "MODERADOR"), getAllReportesAdmin);
+
+// Aprobar o Rechazar reporte
+router.put("/admin/:id", protect, authorize("ADMIN", "MODERADOR"), updateReporteEstado);
+
+// Eliminar reporte físicamente
+router.delete("/admin/:id", protect, authorize("ADMIN"), deleteReporte);
 
 
 export default router;

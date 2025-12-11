@@ -4,13 +4,18 @@ import ReportePerdido from '../models/ReportePerdido.Model';
 import { UploadedFile } from 'express-fileupload';
 import cloudinary from '../config/cloudinary';
 
+interface AuthRequest extends Request {
+    user?: any;
+}
+
 /**
  * @desc Crear un nuevo reporte de gato perdido
  * @route POST /api/reportes
  * @access Public
  */
-export const createReportePerdido = async (req: Request, res: Response) => {
+export const createReportePerdido = async (req: AuthRequest, res: Response) => {
     const { nombreGato, descripcion, zona, contacto, fecha } = req.body;
+    const usuario = req.user;
 
     try {
         // validar que vengan los datos (la validacion de 'express-validator' actuara primero)
@@ -38,7 +43,8 @@ export const createReportePerdido = async (req: Request, res: Response) => {
             contacto,
             fecha,
             foto: result.secure_url, // URL de la imagen en Cloudinary
-            estado: 'pendiente' // estado inicial
+            estado: 'pendiente', // estado inicial
+            creadoPor: usuario._id // Vinculamos al usuario autenticado si existe
         });
 
         const reporteGuardado = await nuevoReporte.save();
@@ -60,27 +66,58 @@ export const createReportePerdido = async (req: Request, res: Response) => {
  */
 export const getReportesAprobados = async (req: Request, res: Response) => {
     try {
-        // solo mostramos al publico los que el admin apruebe
-        const reportes = await ReportePerdido.find({ estado: 'aprobado' }).sort({ createdAt: -1 }); // ordenar por fecha mas reciente
-
+        const reportes = await ReportePerdido.find({ 
+            estado: { $in: ['aprobado', 'encontrado'] } // Mostramos también los encontrados
+        }).sort({ createdAt: -1 });
         res.status(200).json(reportes);
     } catch (error) {
-        console.error('Error al obtener los reportes de gatos:', error);
-        res.status(500).json({ message: 'Error en el servidor al obtener los reportes' });
+        res.status(500).json({ message: 'Error al obtener reportes' });
     }
 }
 
 /**
+ * @desc Obtener un reporte por su ID
+ * @route GET /api/reportes/:id
+ * @access Public
+ */
+export const getReporteById = async (req: Request, res: Response) => {
+    try {
+        const reporte = await ReportePerdido.findById(req.params.id).populate('creadoPor', 'username email');
+        if (!reporte) {
+            return res.status(404).json({ message: 'Reporte no encontrado' });
+        }
+        res.status(200).json(reporte);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener el reporte' });
+    }
+}
+
+/**
+ * @desc Obtener mis reportes de gato perdido
+ * @route GET /api/reportes/mis-reportes
+ * @access Private
+ */
+// Obtener mis reportes (Perfil Usuario)
+export const getMisReportes = async (req: AuthRequest, res: Response) => {
+    try {
+        const reportes = await ReportePerdido.find({ creadoPor: req.user._id }).sort({ createdAt: -1 });
+        res.status(200).json(reportes);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener tus reportes' });
+    }
+};
+
+/**
  * @desc Obtener TODOS los reportes (Pendientes, Aprobados, etc.)
  * @route GET /api/reportes/admin/all
- * @access Private (Admin)
+ * @access Private
  */
 export const getAllReportesAdmin = async (req: Request, res: Response) => {
     try {
-        const reportes = await ReportePerdido.find().sort({ createdAt: -1 });
+        const reportes = await ReportePerdido.find().populate('creadoPor', 'nombre email').sort({ createdAt: -1 });
         res.status(200).json(reportes);
     } catch (error) {
-        res.status(500).json({ message: 'Error al obtener los reportes' });
+        res.status(500).json({ message: 'Error al obtener reportes' });
     }
 };
 
@@ -91,26 +128,44 @@ export const getAllReportesAdmin = async (req: Request, res: Response) => {
  */
 export const updateReporteEstado = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { estado } = req.body; // El admin enviará el nuevo estado (ej: "aprobado" o "rechazado") 
+    const { estado } = req.body; 
 
-    // Validación de seguridad
-    if (!['aprobado', 'rechazado'].includes(estado)) {
-        return res.status(400).json({ message: 'Estado no válido' });
+    if (!['aprobado', 'rechazado', 'pendiente'].includes(estado)) {
+        return res.status(400).json({ message: 'Estado inválido para admin' });
     }
 
     try {
-        const reporte = await ReportePerdido.findById(id);
+        const reporte = await ReportePerdido.findByIdAndUpdate(id, { estado }, { new: true });
+        if (!reporte) return res.status(404).json({ message: 'Reporte no encontrado' });
+        res.status(200).json(reporte);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al actualizar' });
+    }
+};
+
+/**
+ * @desc Marcar un reporte como ENCONTRADO (Usuario que creó el reporte)
+ * @route PUT /api/reportes/encontrado/:id
+ * @access Private
+ */
+// Usuario marca como encontrado
+export const marcarComoEncontrado = async (req: AuthRequest, res: Response) => {
+    const { id } = req.params;
+    const usuario = req.user;
+
+    try {
+        const reporte = await ReportePerdido.findOne({ _id: id, creadoPor: usuario._id });
 
         if (!reporte) {
-        return res.status(404).json({ message: 'Reporte no encontrado' });
+            return res.status(404).json({ message: 'Reporte no encontrado o no tienes permiso' });
         }
 
-        reporte.estado = estado;
+        reporte.estado = 'encontrado';
         await reporte.save();
 
-        res.status(200).json({ message: `Reporte ${estado} exitosamente`, reporte });
+        res.status(200).json({ message: '¡Qué alegría! Gato marcado como encontrado.', reporte });
     } catch (error) {
-        res.status(500).json({ message: 'Error al actualizar el reporte' });
+        res.status(500).json({ message: 'Error al actualizar' });
     }
 };
 
@@ -122,15 +177,9 @@ export const updateReporteEstado = async (req: Request, res: Response) => {
 export const deleteReporte = async (req: Request, res: Response) => {
   try {
     const reporte = await ReportePerdido.findByIdAndDelete(req.params.id);
-
-    if (!reporte) {
-      return res.status(404).json({ message: 'Reporte no encontrado' });
-    }
-
-    // mas adelante aqui vamos a crear la logica para borrar la imagen de Cloudinary
-
-    res.status(200).json({ message: 'Reporte eliminado exitosamente' });
+    if (!reporte) return res.status(404).json({ message: 'Reporte no encontrado' });
+    res.status(200).json({ message: 'Reporte eliminado' });
   } catch (error) {
-    res.status(500).json({ message: 'Error al eliminar el reporte' });
+    res.status(500).json({ message: 'Error al eliminar' });
   }
 };

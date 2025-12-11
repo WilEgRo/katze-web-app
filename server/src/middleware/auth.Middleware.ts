@@ -11,26 +11,26 @@ if (!JWT_SECRET) {
     process.exit(1);
 }
 
-// esta es una extension de la interfaz Request para agregar el campo user al objeto request
 export interface AuthRequest extends Request {
-    user?: string | JwtPayload;
+    user?: any; // Usamos any para facilitar acceso a .role y ._id
 }
 
 // Middleware para restringir por roles
 export const authorize = (...roles: string[]) => {
   return (req: any, res: Response, next: NextFunction) => {
+    // Verificar si hay usuario (puesto por 'protect')
     if (!req.user) {
-      return res.status(401).json({ message: 'No autorizado' });
+      return res.status(401).json({ message: 'No autorizado, usuario no identificado' });
     }
 
-    // Necesitamos buscar al usuario en la BD para estar seguros de su rol actual
-    // (O confiar en el token si guardamos el rol ahí, por ahora consultemos la BD por seguridad extrema)
-    // ... implementación simplificada asumiendo que req.user tiene el rol si lo agregamos al JWT payload
-    // Por ahora, vamos a confiar en que implementaremos el rol en el token:
-    
-    // NOTA: Para que esto funcione perfecto, deberíamos agregar 'role' al payload del JWT en authController.
-    // Pero para no complicarnos ahora, asumiremos que el admin tiene acceso a todo.
-    
+    // Verificar si el rol del usuario está en la lista permitida
+    // Nota: req.user.role viene del payload del token que creamos en auth.Controller
+    if (!roles.includes(req.user.role)) {
+        return res.status(403).json({ 
+            message: `Acceso denegado. Se requiere rol: ${roles.join(' o ')}` 
+        });
+    }
+
     next();
   };
 };
@@ -38,20 +38,17 @@ export const authorize = (...roles: string[]) => {
 export const protect = (req: AuthRequest, res: Response, next: NextFunction) => {
     let token;
 
-    // revisa si el token esta en los headers el formato estandar es: "Authorization: Bearer <token>"
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
-            // obtener el tokenb quitando la palabra Bearer y el espacio
             token = req.headers.authorization.split(' ')[1];
 
-            // verificar el token
             const decoded = jwt.verify(token as string, JWT_SECRET as string);
-            req.user = decoded; // si es valido, adjuntamos los datos del usuario al objero request para que los controladores puedan usarlo
+            req.user = decoded; 
 
-            // dejarlo pasar a la siguiente funcion
             next();
 
         } catch (error) {
+            console.error(error);
             res.status(401).json({ message: "No autorizado, token inválido" });
         }
     }

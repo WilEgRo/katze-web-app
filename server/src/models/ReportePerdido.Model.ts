@@ -8,7 +8,8 @@ export interface IReportePerdido extends Document {
     zona: string; // donde se encontro o perdio
     contacto: string; // informacion de contacto
     fecha: Date;
-    estado: string; // "pendiente", "aprobado", "rechazado"
+    estado: 'pendiente' | 'aprobado' | 'rechazado' | 'encontrado';
+    creadoPor: mongoose.Schema.Types.ObjectId; // Relación con el Usuario
 }
 
 // Esquema (Schema) de Mongoose
@@ -43,13 +44,18 @@ const ReportePerdidoSchema: Schema = new Schema({
         type: Date,
         default: Date.now
     },
-    estado:
+    estado: 
     {
         type: String,
         required: true,
-        enum: ["pendiente", "aprobado", "rechazado"],
-        default: "pendiente" // clave para el mcp de administracion de reportes
+        enum: ["pendiente", "aprobado", "rechazado", "encontrado"],
+        default: "pendiente"
     },
+    creadoPor: { 
+        type: Schema.Types.ObjectId, 
+        ref: 'User',
+        required: true
+    }
 }, { 
     timestamps: true 
 });

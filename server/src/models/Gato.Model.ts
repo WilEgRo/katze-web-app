@@ -8,8 +8,10 @@ export interface IGato extends Document {
     edad: string; // Ej: "Adulto", "Cachorro", "1 año"
     caracter: string;
     estadoSalud: string;
-    estado: string; // 'enAdopcion', 'adoptado', 'hogarTemporal'
+    estado: 'enAdopcion' | 'adoptado' | 'hogarTemporal' | 'perdido' | 'pendiente' | 'rechazado';
     solicitudesCount: number;
+    creadoPor: mongoose.Schema.Types.ObjectId; // Relación con el Usuario
+    ubicacion?: string; // Coordenadas o descripción de zona
 }
 
 // Definir el esquema del gato
@@ -39,14 +41,23 @@ const GatoSchema: Schema = new Schema({
         required: true 
     },
     estado: {
-      type: String,
-      required: true,
-      enum: ['enAdopcion', 'adoptado', 'hogarTemporal', 'perdido'],
-      default: 'enAdopcion',
+        type: String,
+        required: true,
+        enum: ['enAdopcion', 'adoptado', 'hogarTemporal', 'perdido', 'pendiente', 'rechazado'],
+        default: 'pendiente',
+    },
+    ubicacion: { 
+        type: String,
+        required: false
     },
     solicitudesCount: { 
         type: Number, 
         default: 0 
+    },
+    creadoPor: { 
+        type: Schema.Types.ObjectId, 
+        ref: 'User',
+        required: true
     },
   },
   {

@@ -64,13 +64,29 @@ export const crearSolicitud = async (req: Request, res: Response) => {
 // Obtener solicitudes (Admin)
 export const getSolicitudes = async (req: Request, res: Response) => {
     try {
-        // Usamos .populate('gatoId') para traer los datos del gato (nombre, foto) junto con la solicitud
-        const solicitudes = await Solicitud.find()
-        .populate('gatoId', 'nombre fotos') 
-        .sort({ fecha: -1 });
+        const { search } = req.query; // Leemos el parámetro ?search=Nombre
+        let filter = {};
+
+        // Si hay búsqueda, primero encontramos los IDs de gatos que coincidan con el nombre
+        if (search) {
+            // Buscamos gatos cuyo nombre contenga el texto (insensible a mayúsculas)
+            const gatosMatching = await Gato.find({ 
+                nombre: { $regex: search, $options: 'i' } 
+            }).select('_id');
+
+            const gatoIds = gatosMatching.map(g => g._id);
+            
+            // Filtramos solicitudes que pertenezcan a esos gatos
+            filter = { gatoId: { $in: gatoIds } };
+        }
+
+        const solicitudes = await Solicitud.find(filter)
+            .populate('gatoId', 'nombre fotos') 
+            .sort({ createdAt: -1 }); // Usar createdAt es más estándar si lo tienes, si no usa fecha
         
         res.status(200).json(solicitudes);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: 'Error al obtener solicitudes' });
     }
 };
