@@ -46,8 +46,6 @@ export const gatoRules = () => [
     body('edad').notEmpty().trim().escape(),
     body('caracter').notEmpty().trim().escape(),
     body('estadoSalud').notEmpty().trim().escape(),
-    
-    // AQUÍ ESTABA EL PROBLEMA POTENCIAL:
     body('estado')
         .optional() // Es opcional porque el controller lo asigna por defecto si no viene
         .isIn(['enAdopcion', 'adoptado', 'hogarTemporal', 'perdido', 'pendiente', 'rechazado']) 

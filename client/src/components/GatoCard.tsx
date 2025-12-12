@@ -60,12 +60,12 @@ const GatoCard = ({ gato }: Props) => {
 
                 {/* BOTÓN DE ACCIÓN (Lógica Condicional) */}
                 {isAdoptado ? (
-                    // CASO 1: ADOPTADO -> Botón normal (El click sube al div padre en HomePage y abre el Popup)
+                    // ADOPTADO -> Botón normal (El click sube al div padre en HomePage y abre el Popup)
                     <button type="button" className={buttonStyles}>
                         Leer Final Feliz
                     </button>
                 ) : (
-                    // CASO 2: EN ADOPCIÓN -> Link de React Router (Navega a la ficha)
+                    // EN ADOPCIÓN -> Link de React Router (Navega a la ficha)
                     <Link to={`/adopta/${gato._id}`} className={buttonStyles}>
                         Adoptar
                     </Link>

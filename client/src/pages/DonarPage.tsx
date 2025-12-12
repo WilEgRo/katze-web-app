@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fa';
 import gatoPlaceholder from '../assets/gato-donacion.png';
 import qrPlaceholder from '../assets/qr-banco.png';
+import { toast } from 'react-toastify';
 
 const DonarPage = () => {
     const [configWeb, setConfigWeb] = useState({
@@ -18,7 +19,7 @@ const DonarPage = () => {
     });
 
     // Estados del formulario
-    const [monto, setMonto] = useState<number | ''>('');
+    const [proposito, setProposito] = useState<string | ''>('');
     const [nombre, setNombre] = useState('');
     const [email, setEmail] = useState('');
     const [file, setFile] = useState<File | null>(null);
@@ -26,12 +27,12 @@ const DonarPage = () => {
     const [enviando, setEnviando] = useState(false);
 
     const opcionesDonacion = [
-        { valor: 10, label: "Alimentos", icon: <FaUtensils className="text-2xl mb-1" /> },
-        { valor: 25, label: "Rescates", icon: <FaHandHoldingHeart className="text-2xl mb-1" /> },
-        { valor: 50, label: "Salud", icon: <FaStethoscope className="text-2xl mb-1" /> }
+        { valor: "Alimentos", label: "Alimentos", icon: <FaUtensils className="text-2xl mb-1" /> },
+        { valor: "Rescate", label: "Rescates", icon: <FaHandHoldingHeart className="text-2xl mb-1" /> },
+        { valor: "Salud", label: "Salud", icon: <FaStethoscope className="text-2xl mb-1" /> }
     ];
 
-    // 2. EFECTO: CARGAR IMÁGENES REALES DEL BACKEND AL INICIAR
+    // CARGAR IMÁGENES REALES DEL BACKEND AL INICIAR
     useEffect(() => {
         const fetchConfig = async () => {
             try {
@@ -54,14 +55,27 @@ const DonarPage = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!proposito) {
+            toast.warn("Selecciona el tipo de ayuda.");
+            return;
+        }
+
+        if (!file) {
+            toast.error("Debes subir la foto del comprobante."); // para verificar que con .warn y .error funcionan distinto
+            return;
+        }
+
         setEnviando(true);
 
-        console.log("Datos a enviar:", { nombre, email, monto, file });
+        const toastId = toast.info("⏳ Enviando comprobante...", { autoClose: false });
+        console.log("Datos a enviar:", { nombre, email, proposito, file });
 
         setTimeout(() => {
-            alert(`¡Gracias ${nombre || 'amigo'}! Hemos recibido tu comprobante. Te enviaremos un correo a ${email} 😺`);
+            toast.dismiss(toastId);
+            toast.success(`¡Gracias ${nombre || 'amigo'}! Recibimos tu comprobante. Te enviaremos un correo a ${email} para confirmar 😺`);
             setEnviando(false);
-            setMonto('');
+            setProposito('');
             setNombre('');
             setEmail('');
             setFile(null);
@@ -118,9 +132,9 @@ const DonarPage = () => {
                             <button
                                 key={opcion.label}
                                 type="button"
-                                onClick={() => setMonto(opcion.valor)}
+                                onClick={() => setProposito(opcion.valor)}
                                 className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all duration-300 group
-                                ${monto === opcion.valor
+                                ${proposito === opcion.valor
                                         ? 'border-katze-gold bg-orange-50 dark:bg-yellow-900/10 text-katze-gold shadow-md transform scale-105'
                                         : 'border-gray-200 dark:border-gray-700 bg-transparent text-gray-500 hover:border-katze-gold/50 hover:text-katze-gold'
                                     }`}
@@ -133,24 +147,12 @@ const DonarPage = () => {
                         ))}
                     </div>
 
-                    {/* Input Monto */}
-                    <div className="relative group">
-                        <input
-                            type="number"
-                            value={monto}
-                            onChange={(e) => setMonto(Number(e.target.value))}
-                            placeholder="Monto a donar..."
-                            className="w-full bg-gray-50 dark:bg-katze-dark-card border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-katze-gold/50 transition-all placeholder:text-gray-400 pl-4"
-                        />
-                        <span className="absolute right-4 top-4 font-bold text-gray-400 group-focus-within:text-katze-gold transition-colors">Bs</span>
-                    </div>
-
                     {/* Input Nombre */}
                     <input
                         type="text"
                         value={nombre}
                         onChange={(e) => setNombre(e.target.value)}
-                        placeholder="Tu Nombre (Opcional)"
+                        placeholder="Tu Nombre (puedes usar un alias)"
                         className="w-full bg-gray-50 dark:bg-katze-dark-card border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-katze-gold/50 transition-all placeholder:text-gray-400"
                     />
 
@@ -160,7 +162,7 @@ const DonarPage = () => {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Tu Correo (Para agradecerte)"
+                            placeholder="Tu Correo (usuario@correo.com)"
                             required
                             className="w-full bg-gray-50 dark:bg-katze-dark-card border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-katze-gold/50 transition-all placeholder:text-gray-400 pl-12"
                         />

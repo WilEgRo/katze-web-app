@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaUserCircle, FaSignOutAlt, FaCat, FaBullhorn, FaCheckCircle, FaCamera, FaTimesCircle, FaCheck } from 'react-icons/fa';
 import { getMisReportes, marcarComoEncontrado, type Reporte } from '../services/reporte.Service';
 import { getMisGatos, createGatoUser, type Gato } from '../services/gato.Service';
-import { toast } from 'react-hot-toast';
+import { toast } from 'react-toastify';
 
 const PerfilPage = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const PerfilPage = () => {
   // Estados de Interfaz
   const [activeTab, setActiveTab] = useState<'reportes' | 'gatos'>('reportes');
   const [showAdopcionForm, setShowAdopcionForm] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // <--- NUEVO ESTADO PARA EL POPUP
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // Formulario Nuevo Gato
   const [gatoForm, setGatoForm] = useState({
@@ -82,7 +82,7 @@ const PerfilPage = () => {
           
           toast.dismiss(toastId); 
           
-          // AQUÍ ACTIVAMOS EL POPUP DE ÉXITO EN LUGAR DE SOLO EL TOAST
+          // ACTIVAMOS EL POPUP DE ÉXITO EN LUGAR DE SOLO EL TOAST
           setShowSuccessModal(true); 
           
           setShowAdopcionForm(false);
@@ -100,7 +100,7 @@ const PerfilPage = () => {
           toast.dismiss(toastId);
           console.error("Error al subir:", error);
           const mensaje = error.response?.data?.message || "Ocurrió un error al subir el gato.";
-          toast.error(mensaje, { duration: 5000, icon: '🤖' });
+          toast.error("Tuvimos un problema: " + mensaje);
       } finally {
           setLoadingGato(false);
       }

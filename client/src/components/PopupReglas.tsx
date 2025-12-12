@@ -43,7 +43,7 @@ const PopupReglas: React.FC<PopupProps> = ({ onClose, onAccept }) => {
                     <h2 className="text-xl font-bold font-serif flex items-center gap-2">
                         <FaPaw /> Requisitos de Adopción
                     </h2>
-                    {/* Botón X para cerrar sin aceptar (opcional) */}
+                    {/* Botón X para cerrar sin aceptar */}
                     <button onClick={onClose} className="hover:bg-white/20 p-2 rounded-full transition">
                         <FaTimes size={20} />
                     </button>

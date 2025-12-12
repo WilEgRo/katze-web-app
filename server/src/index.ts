@@ -22,7 +22,7 @@ const PORT = process.env.PORT || 8080;
 // ------------- Middleware -------------
 const whiteList = [
   process.env.FRONTEND_URL, //vercel
-  "http://localhost:5173",
+  "http://localhost:5173", //vite dev
 ];
 
 app.use(cors({
@@ -41,7 +41,7 @@ app.use(cors({
 
 app.use(express.json());
 
-// 3. ARCHIVOS TEMPORALES (Universal)
+// ARCHIVOS TEMPORALES (Universal)
 app.use(fileUpload({
   useTempFiles: true
 }));

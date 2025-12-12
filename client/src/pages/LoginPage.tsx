@@ -89,7 +89,7 @@ const AdminLoginPage = () => {
             {loading ? 'Entrando...' : 'Iniciar Sesión'}
           </button>
           
-          {/* 👇 NUEVO: SECCIÓN DE REGISTRO */}
+          {/* SECCIÓN DE REGISTRO */}
           <div className="text-center mt-8 border-t border-gray-100 dark:border-gray-700 pt-6">
             <p className="text-sm text-gray-500 mb-2">
               ¿Eres nuevo en Katze?

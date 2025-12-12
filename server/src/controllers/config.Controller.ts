@@ -26,7 +26,7 @@ export const updateConfig = async (req: Request, res: Response) => {
         console.log("3. Body:", req.body);
         const updateData: any = {};
 
-        // 1. Verificar si se subió imagen del QR ('qrImage')
+        // Verificar si se subió imagen del QR ('qrImage')
         if (req.files && req.files.qrImage) {
             const qrFile = req.files.qrImage as UploadedFile;
 

@@ -19,14 +19,16 @@ import AdminRoute from './components/AdminRoute';
 import PerfilPage from './pages/PerfilPage';
 import RegisterPage from './pages/RegisterPage';
 import NotFoundPage from './pages/NotFoundPage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+
 
 // Creamos este componente "interno" para poder usar el hook useTheme
 // (No podemos usar useTheme directamente dentro de App porque App es el que tiene el Provider)
 const AppContent = () => {
-  const { theme } = useTheme(); // <--- 2. Obtenemos el estado actual (light o dark)
+  const { theme } = useTheme(); // Obtenemos el estado actual (light o dark)
 
   return (
-    // 3. AQUÍ ESTÁ LA MAGIA DEL FONDO:
     // Si theme es 'dark', usa 'bg-katze-dark' (negro). Si no, 'bg-white'.
     <div className={`min-h-screen font-sans transition-colors duration-300 ${theme === 'dark' ? 'bg-katze-dark' : 'bg-white'}`}>
       <Navbar />
@@ -89,6 +91,18 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
+      <ToastContainer 
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored" // Opciones: "light", "dark", "colored"
+      />
       <AppContent />
     </Router>
   );

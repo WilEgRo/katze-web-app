@@ -2,7 +2,9 @@ import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { createReporte } from '../services/reporte.Service';
 import { FaCamera, FaMapMarkerAlt, FaPhone, FaCat, FaCalendarAlt } from 'react-icons/fa';
 import { validarImagenGato } from '../services/juez.Service';
-import { toast } from 'react-hot-toast';
+import { toast } from 'react-toastify';
+import { isAuthenticated } from '../services/auth.Service';
+import { Link } from 'react-router-dom';
 
 const ReportarPage = () => {
   // Estado del formulario
@@ -48,7 +50,7 @@ const ReportarPage = () => {
       return;
     }
 
-    // variable para guardar el ID de la notiq de carga
+    // variable para guardar el ID de la notificación de carga
     let toastId;
 
     try {
@@ -106,6 +108,29 @@ const ReportarPage = () => {
       setLoading(false);
     }
   };
+
+    // Si no está logueado, mostramos pantalla de bloqueo
+  if (!isAuthenticated()) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-katze-dark flex items-start justify-center p-6 pt-24">
+        <div className="text-center max-w-md bg-white dark:bg-katze-dark-card p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800">
+          <div className="text-5xl mb-4">🔒</div>
+          <h2 className="text-2xl font-bold text-katze-gold font-serif mb-4">Acceso Restringido</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-8">
+            Para evitar el spam y mantener la comunidad segura, necesitas una cuenta para reportar un gato perdido.
+          </p>
+          <div className="flex gap-4 justify-center">
+            <Link to="/login" className="bg-katze-gold text-white px-6 py-3 rounded-xl font-bold hover:bg-yellow-600 transition">
+              Iniciar Sesión
+            </Link>
+            <Link to="/register" className="border-2 border-katze-gold text-katze-gold px-6 py-3 rounded-xl font-bold hover:bg-katze-gold hover:text-white transition">
+              Crear Cuenta
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-katze-dark transition-colors py-12 px-4">

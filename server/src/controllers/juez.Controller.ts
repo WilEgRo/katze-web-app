@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { analizarImagenGato } from "../services/gemini.Service";
 import fs from "fs";
 
-// Truco: Extendemos la interfaz Request para asegurar que TypeScript vea el archivo
+// Extendemos la interfaz Request para asegurar que TypeScript vea el archivo
 interface UploadedFile {
     name: string;
     tempFilePath: string;

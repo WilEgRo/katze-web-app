@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import apiClient from '../../services/apiClient.Service';
 import { FaSave, FaImage, FaQrcode, FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 interface ConfigData {
     qrBancoUrl: string;
@@ -65,10 +66,10 @@ const ConfigManager = () => {
             setQrFile(null); setPreviewQr(null);
             setHeroFile(null); setPreviewHero(null);
 
-            alert("¡Configuración actualizada con éxito! 😺✨");
+            toast.success("¡Configuración actualizada con éxito! 😺✨");
         } catch (error) {
             console.error(error);
-            alert("Error al guardar configuración");
+            toast.error("Error al guardar configuración");
         } finally {
             setLoading(false);
         }

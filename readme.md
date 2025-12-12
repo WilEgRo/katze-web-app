@@ -213,8 +213,8 @@ cd katze-web-app
 
 -   Entra a la carpeta del servidor e instala dependencias:
 ```bash
-    cd server
-    npm install
+cd server
+npm install
 ```
 
 -   Crea un archivo `.env` en la raíz de `server/` con las siguientes variables:
@@ -236,14 +236,14 @@ cd katze-web-app
 -   Ejecuta el seed.ts para obtener datos
 
 ```bash
-    npx ts-node src/data/seed.ts
+npx ts-node src/data/seed.ts
 ```
 **Deberías ver: "🚀 ¡SEED COMPLETADO EXITOSAMENTE!"**
 
 -   Inicia el servidor en modo desarrollo:
 
 ```bash
-    npm run dev
+npm run dev
 ```
 **Deberías ver: "MongoDB Conectado Exitosamente"**
 
@@ -252,20 +252,20 @@ cd katze-web-app
 -   Abre una nueva terminal, ve a la carpeta del cliente e instala dependencias:
 
 ```bash
-    cd client
-    npm install
+cd client
+npm install
 ```
 
 -   Crea un archivo `.env` en la raíz de `client/`:
 
 ```bash
-    VITE_API_URL=http://localhost:8080/api
+VITE_API_URL=http://localhost:8080/api
 ```
 
 -   Inicia el cliente:
 
 ```bash
-    npm run dev
+npm run dev
 ```
 **Abre tu navegador en** `http://localhost:5173`
 
@@ -281,6 +281,7 @@ cd katze-web-app
     - Ve a tu base de datos (MongoDB Atlas), busca la colección users.
     - Edita tu usuario y cambia el campo `role: "USER"` por `role: "ADMIN"`.
     - Vuelve a iniciar sesión. ¡Ahora verás el acceso al Panel de Control!
+    - Todo esto si no utilizaste seed.ts
 
 # 6.- Pruebas y Uso
 

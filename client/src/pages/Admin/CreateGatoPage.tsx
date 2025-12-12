@@ -2,6 +2,7 @@ import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createGato } from '../../services/gato.Service';
 import { FaCat, FaCamera, FaArrowLeft } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const CreateGatoPage = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const CreateGatoPage = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!foto) return alert('La foto es obligatoria');
+    if (!foto) return toast.error('La foto es obligatoria');
 
     setLoading(true);
     try {
@@ -42,11 +43,11 @@ const CreateGatoPage = () => {
       data.append('foto', foto); // 'foto' debe coincidir con el backend (req.files.foto)
 
       await createGato(data);
-      alert('¡Gato creado exitosamente!');
+      toast.success('¡Gato creado exitosamente!');
       navigate('/admin/dashboard'); // Volver al dashboard
     } catch (error) {
       console.error(error);
-      alert('Error al crear el gato');
+      toast.error('Error al crear el gato');
     } finally {
       setLoading(false);
     }

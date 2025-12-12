@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children }: Props) => {
     return <Navigate to="/login" replace />;
   }
 
-  // Si sí está logueado, le dejamos pasar
+  // Si está logueado, le dejamos pasar
   return <>{children}</>;
 };
 

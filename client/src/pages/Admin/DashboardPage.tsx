@@ -9,7 +9,7 @@ import {
   FaSignOutAlt, FaClock, FaHistory, FaCogs, FaCat, FaPlus, FaBullhorn,
   FaEnvelopeOpenText, FaUser, FaHome, FaPhone, FaUserTie, FaUsers, FaPaw
 } from 'react-icons/fa';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 
 
 const DashboardPage = () => {
@@ -297,14 +297,29 @@ const DashboardPage = () => {
                   )}
 
                   {sol.estado === 'aprobada' && (
-                    <a
-                      href={`https://wa.me/${sol.telefono}?text=Hola ${sol.nombreSolicitante}, aprobamos tu solicitud de adopción para ${typeof sol.gatoId === 'object' ? sol.gatoId.nombre : 'el gato'}.`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full text-center bg-green-100 text-green-700 py-3 rounded-xl font-bold hover:bg-green-200 transition border border-green-200 mt-auto flex items-center justify-center gap-2"
-                    >
-                      <FaPhone /> Contactar por WhatsApp
-                    </a>
+                    <div className="w-full mt-auto flex flex-col gap-2">
+                        {/* Botón Principal: Contactar */}
+                        <a 
+                            href={`https://wa.me/${sol.telefono}?text=Hola ${sol.nombreSolicitante}, revisamos tu solicitud para ${typeof sol.gatoId === 'object' ? sol.gatoId.nombre : 'el gato'} y queremos coordinar una entrevista.`} 
+                            target="_blank" 
+                            rel="noreferrer"
+                            className="w-full text-center bg-green-100 text-green-700 py-3 rounded-xl font-bold hover:bg-green-200 transition border border-green-200 flex items-center justify-center gap-2"
+                        >
+                            <FaPhone /> Contactar por WhatsApp
+                        </a>
+
+                        {/* Botón de Rechazo (Filtro Humano Fallido) */}
+                        <button 
+                            onClick={() => {
+                                if(window.confirm(`¿La entrevista no fue exitosa? \n\nAl aceptar, la solicitud de ${sol.nombreSolicitante} pasará a RECHAZADA.`)) {
+                                    handleSolicitudState(sol._id, 'rechazada');
+                                }
+                            }}
+                            className="w-full text-center text-xs text-red-400 hover:text-red-600 hover:bg-red-50 py-2 rounded-lg transition flex items-center justify-center gap-1 font-medium"
+                        >
+                            <FaTimes /> No pasó la entrevista (Rechazar)
+                        </button>
+                    </div>
                   )}
                 </div>
 

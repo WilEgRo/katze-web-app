@@ -57,6 +57,7 @@ const ComunidadPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {reportes.map((item) => (
               <div key={item._id} className="bg-white dark:bg-katze-dark-card rounded-2xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-800 hover:shadow-xl transition group">
+                
                 {/* Foto */}
                 <div className="h-64 overflow-hidden relative">
                   <img src={item.foto} alt="Mascota" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />

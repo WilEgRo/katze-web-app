@@ -122,7 +122,7 @@ return (
       {isPopupOpen && (
         <PopupReglas 
             onClose={handleClosePopup} 
-            onAccept={handleAcceptPopup} // <--- ¡AQUÍ ESTABA EL ERROR! Faltaba esta propiedad
+            onAccept={handleAcceptPopup}
         />
       )}
     </div>

@@ -38,7 +38,6 @@ const AdoptaPage = () => {
   }, []);
 
   // --- MANEJADORES DEL POPUP ---
-  
   // Cuando da click en "Aceptar" dentro del Popup
   const handleRulesAccepted = () => {
     sessionStorage.setItem('katze_rules_accepted', 'true'); // Guardar marca
@@ -55,8 +54,7 @@ const AdoptaPage = () => {
       // Solo cerramos el modal y lo dejamos en la página.
       setShowRules(false);
     } else {
-      // Es la primera vez y quiere cerrar sin aceptar.
-      // Lo expulsamos al inicio.
+      // Es la primera vez y quiere cerrar sin aceptar. Lo expulsamos al inicio.
       navigate('/'); 
     }
   };

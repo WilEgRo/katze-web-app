@@ -65,8 +65,6 @@ export const analizarImagenGato = async (rutaImagen: string): Promise<boolean> =
             // Si es otro error (o se acabaron los intentos), fallamos de verdad
             console.error("❌ Error definitivo en Gemini:", error);
             
-            // IMPORTANTE: Aquí podrías lanzar el error hacia arriba para que el Controller
-            // le diga al usuario "Error de servidor" en vez de "No es un gato".
             throw error;
         }
     }

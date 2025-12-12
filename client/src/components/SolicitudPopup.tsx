@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaTimes, FaPaw, FaPaperPlane } from 'react-icons/fa';
 import { createSolicitud } from '../services/solicitud.Service';
+import { toast } from 'react-toastify';
 
 interface Props {
   gatoId: string;
@@ -36,7 +37,7 @@ const SolicitudPopup = ({ gatoId, gatoNombre, onClose }: Props) => {
       await createSolicitud({ ...formData, gatoId });
       setSuccess(true);
     } catch (error) {
-      alert("Error al enviar la solicitud. Intenta nuevamente.");
+      toast.error("Error al enviar la solicitud. Intenta nuevamente.");
     } finally {
       setLoading(false);
     }
