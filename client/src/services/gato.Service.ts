@@ -10,7 +10,8 @@ export interface Gato {
     estadoSalud: string;
     estado: 'enAdopcion' | 'adoptado' | 'hogarTemporal' | 'perdido' | 'pendiente' | 'rechazado';
     ubicacion?: string; // Nuevo campo
-    creadoPor?: string; // ID del usuario que creó el gato    
+    creadoPor?: string; // ID del usuario que creó el gato
+    solicitudesCount?: number; // Número de solicitudes de adopción recibidas    
 }
 
 // Funcion para obtener todos los gatos publicos
