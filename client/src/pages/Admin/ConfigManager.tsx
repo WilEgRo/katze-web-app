@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { FaSave, FaImage, FaQrcode, FaArrowLeft } from 'react-icons/fa'; // Agregué FaArrowLeft
-import { Link } from 'react-router-dom'; // Importamos Link para navegar
+import apiClient from '../../services/apiClient.Service';
+import { FaSave, FaImage, FaQrcode, FaArrowLeft } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 interface ConfigData {
     qrBancoUrl: string;
@@ -21,7 +21,8 @@ const ConfigManager = () => {
     useEffect(() => {
         const fetchConfig = async () => {
             try {
-                const { data } = await axios.get('http://localhost:5000/api/config');
+                // 2. CAMBIO: Usamos apiClient.get('/config') sin la URL completa
+                const { data } = await apiClient.get('/config');
                 setConfig(data);
             } catch (error) {
                 console.error("Error cargando config:", error);
@@ -54,12 +55,14 @@ const ConfigManager = () => {
         if (heroFile) formData.append('heroImage', heroFile);
 
         try {
-            const token = localStorage.getItem('token');
+            // 3. CAMBIO IMPORTANTE:
+            // - Usamos apiClient.put('/config')
+            // - Ya NO necesitamos buscar el token con localStorage (el apiClient lo hace solo)
+            // - Solo especificamos que enviamos un archivo (multipart/form-data)
 
-            const { data } = await axios.put('http://localhost:5000/api/config', formData, {
+            const { data } = await apiClient.put('/config', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${token}`
                 }
             });
 
@@ -79,7 +82,7 @@ const ConfigManager = () => {
     return (
         <div className="max-w-4xl mx-auto">
 
-            {/* --- BOTÓN VOLVER ATRÁS (ESTILO MINIMALISTA) --- */}
+            {/* --- BOTÓN VOLVER ATRÁS --- */}
             <div className="mb-6">
                 <Link
                     to="/admin/dashboard"

@@ -1,20 +1,30 @@
 import React, { useState } from 'react';
-import { FaCamera, FaHeart } from 'react-icons/fa';
+import {
+    FaCamera,
+    FaHeart,
+    FaEnvelope,
+    FaUtensils,
+    FaHandHoldingHeart,
+    FaStethoscope
+} from 'react-icons/fa'; // Importamos iconos nuevos para las categorías y el correo
 import gatoHeroImage from '../assets/gato-donacion.png';
 import qrImage from '../assets/qr-banco.png';
 
 const DonarPage = () => {
+    // Estado
     const [monto, setMonto] = useState<number | ''>('');
     const [nombre, setNombre] = useState('');
+    const [email, setEmail] = useState(''); // <--- NUEVO ESTADO PARA EL CORREO
     const [file, setFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [enviando, setEnviando] = useState(false);
 
-    // Definimos valor y etiqueta para cada botón
+    // Definimos las categorías con Iconos. 
+    // Mantenemos el 'valor' interno para rellenar el input, aunque no se muestre el texto "Bs".
     const opcionesDonacion = [
-        { valor: 10, label: "Alimentos" },
-        { valor: 25, label: "Rescates" },
-        { valor: 50, label: "Salud" }
+        { valor: 10, label: "Alimentos", icon: <FaUtensils className="text-2xl mb-1" /> },
+        { valor: 25, label: "Rescates", icon: <FaHandHoldingHeart className="text-2xl mb-1" /> },
+        { valor: 50, label: "Salud", icon: <FaStethoscope className="text-2xl mb-1" /> }
     ];
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,26 +32,29 @@ const DonarPage = () => {
             const selectedFile = e.target.files[0];
             setFile(selectedFile);
             setPreviewUrl(URL.createObjectURL(selectedFile));
-            console.log("que es: ", file);
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setEnviando(true);
-        // Simulación
+
+        // AQUÍ LUEGO CONECTAREMOS CON EL BACKEND PARA ENVIAR EL CORREO A MAKE
+        console.log("Datos a enviar:", { nombre, email, monto, file });
+
         setTimeout(() => {
-            alert("¡Gracias por tu donación! Hemos recibido tu comprobante. 😺");
+            alert(`¡Gracias ${nombre || 'amigo'}! Hemos recibido tu comprobante. Te enviaremos un correo a ${email} 😺`);
             setEnviando(false);
             setMonto('');
             setNombre('');
+            setEmail(''); // Limpiamos el correo
             setFile(null);
             setPreviewUrl(null);
         }, 2000);
     };
 
     return (
-        <div className="pt-22 pb-12 px-6 flex flex-col items-center justify-center min-h-screen">
+        <div className="pt-24 pb-12 px-6 flex flex-col items-center justify-center min-h-screen">
 
             {/* SECCIÓN HERO (Imagen Gato Grande) */}
             <div className="relative mb-12 flex items-center justify-center group">
@@ -81,39 +94,40 @@ const DonarPage = () => {
                 </div>
 
                 {/* LADO DERECHO: FORMULARIO */}
-                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
-                    {/* Botones de Monto Dinámicos */}
-                    <div className="grid grid-cols-3 gap-4">
+                    {/* Botones de Categoría (Sin mostrar precio, solo concepto) */}
+                    <div className="grid grid-cols-3 gap-3">
                         {opcionesDonacion.map((opcion) => (
                             <button
-                                key={opcion.valor}
+                                key={opcion.label}
                                 type="button"
                                 onClick={() => setMonto(opcion.valor)}
-                                className={`flex flex-col items-center justify-center p-4 rounded-2xl border transition-all duration-300 group
+                                className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all duration-300 group
                                 ${monto === opcion.valor
                                         ? 'border-katze-gold bg-orange-50 dark:bg-yellow-900/10 text-katze-gold shadow-md transform scale-105'
-                                        : 'border-gray-200 dark:border-gray-700 bg-transparent text-gray-500 hover:border-katze-gold/50'
+                                        : 'border-gray-200 dark:border-gray-700 bg-transparent text-gray-500 hover:border-katze-gold/50 hover:text-katze-gold'
                                     }`}
                             >
-                                <span className="text-xl md:text-2xl font-bold">Bs {opcion.valor}</span>
-                                <span className={`text-[10px] uppercase font-semibold mt-1 transition-colors ${monto === opcion.valor ? 'text-katze-gold' : 'text-gray-400 group-hover:text-katze-gold'}`}>
+                                {/* Icono */}
+                                {opcion.icon}
+                                {/* Texto solo */}
+                                <span className="text-xs md:text-sm font-bold uppercase tracking-wide">
                                     {opcion.label}
                                 </span>
                             </button>
                         ))}
                     </div>
 
-                    {/* Input Monto Custom */}
+                    {/* Input Monto (Donde se ve el número) */}
                     <div className="relative group">
                         <input
                             type="number"
                             value={monto}
                             onChange={(e) => setMonto(Number(e.target.value))}
-                            placeholder="Otro monto..."
-                            className="w-full bg-gray-50 dark:bg-katze-dark-card border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-katze-gold/50 transition-all placeholder:text-gray-400"
+                            placeholder="Monto a donar..."
+                            className="w-full bg-gray-50 dark:bg-katze-dark-card border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-katze-gold/50 transition-all placeholder:text-gray-400 pl-4"
                         />
-                        {/* CAMBIO AQUÍ: Bs en la esquina derecha */}
                         <span className="absolute right-4 top-4 font-bold text-gray-400 group-focus-within:text-katze-gold transition-colors">Bs</span>
                     </div>
 
@@ -122,9 +136,22 @@ const DonarPage = () => {
                         type="text"
                         value={nombre}
                         onChange={(e) => setNombre(e.target.value)}
-                        placeholder="Tu nombre (Opcional)"
+                        placeholder="Tu Nombre (Opcional)"
                         className="w-full bg-gray-50 dark:bg-katze-dark-card border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-katze-gold/50 transition-all placeholder:text-gray-400"
                     />
+
+                    {/* NUEVO: Input Correo */}
+                    <div className="relative group">
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Tu Correo (Para agradecerte)"
+                            required // Hacemos el correo obligatorio si queremos automatizar
+                            className="w-full bg-gray-50 dark:bg-katze-dark-card border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-katze-gold/50 transition-all placeholder:text-gray-400 pl-12"
+                        />
+                        <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-katze-gold transition-colors" />
+                    </div>
 
                     {/* Subir Comprobante */}
                     <div className="relative">
@@ -155,7 +182,7 @@ const DonarPage = () => {
                         </label>
                     </div>
 
-                    {/* Botón */}
+                    {/* Botón Enviar */}
                     <button
                         type="submit"
                         disabled={enviando}

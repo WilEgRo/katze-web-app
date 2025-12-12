@@ -11,11 +11,11 @@ const apiClient = axios.create({
 //Interceptor Si tenemos un token guardado, lo añadimos a cada petición
 // esto nos servira cuando hagamos el login del Admin
 apiClient.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export default apiClient;

@@ -20,13 +20,30 @@ const app: Application = express();
 const PORT = process.env.PORT || 8080;
 
 // ------------- Middleware -------------
-app.use(cors());
+const whiteList = [
+  process.env.FRONTEND_URL // Leerá la URL de Vercel en Producción
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || whiteList.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log("Bloqueado por CORS. Origen intentando entrar:", origin);
+      callback(new Error('Error de CORS: No permitido por Katze Policy'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Permitimos PUT para subir archivos
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
 app.use(express.json());
 
+// 3. ARCHIVOS TEMPORALES (Universal)
 app.use(fileUpload({
-  useTempFiles: true, // Usar archivos temporales en lugar de memoria
-  tempFileDir: '/tmp/'
-}))
+  useTempFiles: true
+}));
 
 // --------- Definir Rutas de la API --------- //
 app.use('/api/auth', authRoutes); //→ Rutas de autenticación
@@ -44,4 +61,5 @@ app.get('/', (req: Request, res: Response) => {
 // Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`CORS permitido para: ${whiteList}`);
 }); 
