@@ -76,7 +76,7 @@ const DonarPage = () => {
     const imagenQrMostrar = configWeb.qrBancoUrl ? configWeb.qrBancoUrl : qrPlaceholder;
 
     return (
-        <div className="pt-24 pb-12 px-6 flex flex-col items-center justify-center min-h-screen">
+        <div className="pt-15 pb-12 px-6 flex flex-col items-center justify-center min-h-screen">
 
             {/* SECCIÓN HERO (Imagen Dinámica) */}
             <div className="relative mb-12 flex items-center justify-center group">

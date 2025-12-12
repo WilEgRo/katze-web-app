@@ -21,7 +21,8 @@ const PORT = process.env.PORT || 8080;
 
 // ------------- Middleware -------------
 const whiteList = [
-  process.env.FRONTEND_URL // Leerá la URL de Vercel en Producción
+  process.env.FRONTEND_URL, // Leerá la URL de Vercel en Producción
+  "http://localhost:5173",
 ];
 
 app.use(cors({
