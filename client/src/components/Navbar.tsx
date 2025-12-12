@@ -2,16 +2,16 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaCat, FaSun, FaMoon, FaUserCircle, FaSignOutAlt } from 'react-icons/fa'; 
 import { useTheme } from '../context/ThemeContext';
-import PopupReglas from './popup';
+import PopupReglas from './PopupReglas';
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
 
   // estado para saber si el usuario hizo scroll
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   // estado del usuario logeado
   const [user, setUser] = useState<{ username: string, email: string, role: string} | null>(null);
@@ -42,19 +42,27 @@ const Navbar = () => {
     setUser(null);
     navigate('/login');
   };
-  
-  return (
+
+  const handleClosePopup = () => setIsPopupOpen(false);
+  const handleAcceptPopup = () => {
+      sessionStorage.setItem('katze_rules_accepted', 'true');
+      setIsPopupOpen(false);
+      // Opcional: Navegar a /adopta si se abrió desde otro lado
+      navigate('/adopta');
+  };
+
+return (
     // Navbar transparente que hereda el color del fondo general
     <div className={`fixed z-50 transition-all duration-500 ease-in-out flex justify-center
       ${isScrolled 
-        ? 'top-4 left-0 right-0' // MODO ISLA: Bajamos un poco y centramos
-        : 'top-0 left-0 w-full'  // MODO NORMAL: Pegado arriba, ancho completo
+        ? 'top-4 left-0 right-0' // MODO ISLA
+        : 'top-0 left-0 w-full'  // MODO NORMAL
       }
     `}>
       <nav className={`transition-all duration-500 ease-in-out flex justify-between items-center px-8
         ${isScrolled 
           ? 'w-[90%] md:w-[85%] lg:w-[1200px] rounded-full py-3 shadow-2xl bg-white/90 dark:bg-black/90 backdrop-blur-md border border-gray-200 dark:border-gray-800' // ESTILOS ISLA
-          : 'w-full py-5' // ESTILOS NORMALES (Sólido)
+          : 'w-full py-5' // ESTILOS NORMALES
         }
       `}>
         <div className="container mx-auto flex justify-between items-center">
@@ -65,11 +73,12 @@ const Navbar = () => {
             <span className="text-2xl font-extrabold text-katze-gold tracking-tight">Katze.</span>
           </Link>
 
-          {/* MENU CENTRAL - Forzamos que sea visible */}
-          {/* Usamos 'hidden md:flex' para ocultarlo solo en celulares muy pequeños */}
+          {/* MENU CENTRAL */}
           <div className="hidden md:flex items-center gap-10 text-sm font-bold text-gray-500 dark:text-gray-400">
-            <Link to="/"className={isActive('/')}>Inicio</Link>
-            <Link to="/adopta" className={isActive('/adopta')} onClick={() => setIsOpen(true)}>Descubrir</Link>
+            <Link to="/" className={isActive('/')}>Inicio</Link>
+            
+            <Link to="/adopta" className={isActive('/adopta')}>Descubrir</Link>
+            
             <Link to="/comunidad" className={isActive('/comunidad')}>Comunidad</Link>
             <Link to="/donar" className={isActive('/donar')}>Ayudar</Link>
           </div>
@@ -83,7 +92,7 @@ const Navbar = () => {
               {theme === 'light' ? <FaMoon /> : <FaSun />}
             </button>
             
-            {/* LOGICA DE USUARIO (Punto 1) */}
+            {/* LOGICA DE USUARIO */}
             {user ? (
               <div className={`flex items-center gap-3 pl-4 border-l border-gray-300 dark:border-gray-700 `}>
                 <div className="text-right hidden lg:block">
@@ -91,7 +100,7 @@ const Navbar = () => {
                   <p className="text-xs text-gray-500 dark:text-gray-400 max-w-[100px] truncate">{user.username || user.email}</p>
                 </div>
                 
-                {/* Si es Admin o Moderador, clic en el icono lleva al Dashboard */}
+                {/* Si es Admin o Moderador, clic en el icono lleva al Dashboard, si no al Perfil */}
                 <Link to={user.role === 'ADMIN' || user.role === 'MODERADOR' ? "/admin/dashboard" : "/perfil"} className="text-2xl text-gray-700 dark:text-gray-200 hover:text-katze-gold">
                   <FaUserCircle />
                 </Link>
@@ -108,7 +117,14 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-      {isOpen && <PopupReglas onClose={() => setIsOpen(false)} />}
+
+      {/* POPUP DE REGLAS */}
+      {isPopupOpen && (
+        <PopupReglas 
+            onClose={handleClosePopup} 
+            onAccept={handleAcceptPopup} // <--- ¡AQUÍ ESTABA EL ERROR! Faltaba esta propiedad
+        />
+      )}
     </div>
   );
 };

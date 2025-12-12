@@ -1,12 +1,9 @@
-import PopupReglas from "./popup";
-import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <section className="w-full px-6 pb-15">
-      {/* CAJA PRINCIPAL: Fondo gris en día, oscuro en noche, bordes redondeados */}
+      {/* CAJA PRINCIPAL */}
       <div className="
             container mx-auto 
             bg-gray-100 border dark:border-katze-gold
@@ -25,9 +22,14 @@ const Hero = () => {
           </p>
 
           <div>
-            <button className="bg-katze-gold text-white font-bold py-3 px-8 rounded-full hover:bg-yellow-600 transition shadow-md" onClick={() => setIsOpen(true)}>
+            {/* CAMBIO: Usamos Link directo a /adopta */}
+            {/* AdoptaPage se encargará de mostrar el Popup si es la primera vez */}
+            <Link 
+              to="/adopta" 
+              className="inline-block bg-katze-gold text-white font-bold py-3 px-8 rounded-full hover:bg-yellow-600 transition shadow-md"
+            >
               ADOPTAR
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -36,7 +38,6 @@ const Hero = () => {
           {/* Efecto de brillo dorado detrás */}
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-katze-gold opacity-20 blur-[100px] rounded-full"></div>
 
-          {/* IMAGEN DEL GATO (Usaremos una más parecida a la referencia: fondo limpio) */}
           <img
             src="https://images.unsplash.com/photo-1513245543132-31f507417b26?q=80&w=1935&auto=format&fit=crop"
             alt="Gato elegante"
@@ -45,7 +46,6 @@ const Hero = () => {
         </div>
 
       </div>
-      {isOpen && <PopupReglas onClose={() => setIsOpen(false)} />}
     </section>
   );
 };

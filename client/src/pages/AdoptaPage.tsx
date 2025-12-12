@@ -1,20 +1,24 @@
 import { useEffect, useState } from 'react';
-import { getGatos, type Gato } from '../services/gato.Service'; // Usamos getGatos para traer todo y filtrar aquí
+import { getGatos, type Gato } from '../services/gato.Service';
 import GatoCard from '../components/GatoCard';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaInfoCircle } from 'react-icons/fa';
+import PopupReglas from '../components/PopupReglas';
+import { useNavigate } from 'react-router-dom';
 
 const AdoptaPage = () => {
   const [gatos, setGatos] = useState<Gato[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
-  // ESTADO PARA EL BUSCADOR
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+
+  // ESTADO PARA MOSTRAR/OCULTAR EL POPUP
+  const [showRules, setShowRules] = useState(false);
 
   useEffect(() => {
+    // Cargar Gatos
     const fetchGatos = async () => {
       try {
-        // Pedimos TODOS los gatos al backend
         const data = await getGatos();
         setGatos(data);
       } catch (err) {
@@ -24,84 +28,98 @@ const AdoptaPage = () => {
         setLoading(false);
       }
     };
-
     fetchGatos();
+
+    // Lógica de Sesión: ¿Ya vio las reglas?
+    const rulesAccepted = sessionStorage.getItem('katze_rules_accepted');
+    if (!rulesAccepted) {
+      setShowRules(true); // Si no hay marca, abre el popup
+    }
   }, []);
 
-  //FILTRADO Y ORDENAMIENTO
+  // --- MANEJADORES DEL POPUP ---
+  
+  // Cuando da click en "Aceptar" dentro del Popup
+  const handleRulesAccepted = () => {
+    sessionStorage.setItem('katze_rules_accepted', 'true'); // Guardar marca
+    setShowRules(false); // Cerrar popup
+  };
+
+  // Cuando da click en "Cancelar" o la X
+  const handleCloseRules = () => {
+    // Verificamos si ya había aceptado las reglas antes
+    const rulesAccepted = sessionStorage.getItem('katze_rules_accepted');
+
+    if (rulesAccepted) {
+      // Ya las aceptó antes (solo las estaba repasando).
+      // Solo cerramos el modal y lo dejamos en la página.
+      setShowRules(false);
+    } else {
+      // Es la primera vez y quiere cerrar sin aceptar.
+      // Lo expulsamos al inicio.
+      navigate('/'); 
+    }
+  };
+
+  // --- FILTROS ---
   const gatosProcesados = gatos
     .filter(gato => {
-       // Filtro de Estado: Solo mostramos los que buscan hogar (En Adopción o Temporal)
-       // Ocultamos los "Adoptados" y "Perdidos" de esta página
        const esVisible = gato.estado === 'enAdopcion' || gato.estado === 'hogarTemporal';
-
-       // Filtro de Búsqueda: Coincidencia con el texto del usuario
        const textoBusqueda = searchTerm.toLowerCase();
        const coincideTexto = 
          gato.nombre.toLowerCase().includes(textoBusqueda) ||
          gato.descripcion.toLowerCase().includes(textoBusqueda) ||
          gato.edad.toLowerCase().includes(textoBusqueda);
-
        return esVisible && coincideTexto;
     })
-    .sort((a, b) => {
-      // Ordenamiento por Popularidad (Los menos solicitados primero)
-      // Si solicitudesCount es undefined, asumimos 0
-      const solicitudesA = a.solicitudesCount || 0;
-      const solicitudesB = b.solicitudesCount || 0;
-      return solicitudesA - solicitudesB;
-    });
+    .sort((a, b) => (a.solicitudesCount || 0) - (b.solicitudesCount || 0));
 
   return (
-    <div className="min-h-screen bg-white dark:bg-katze-dark transition-colors py-10 px-6">
-      
+    <div className="min-h-screen bg-white dark:bg-katze-dark transition-colors py-10 px-6 pt-28">
       <div className="container mx-auto">
         
-        {/* TÍTULO Y BUSCADOR */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-katze-gold mb-4 font-serif">
-            Encuentra a tu Compañero
-          </h1>
-          <p className="text-gray-500 dark:text-gray-400 text-lg max-w-2xl mx-auto mb-8">
-            Estos pequeños están buscando una segunda oportunidad. <br />
-            Conoce sus historias y dales el hogar que merecen.
-          </p>
+        {/* HEADER */}
+        <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
+            <div className="text-center md:text-left">
+                <h1 className="text-4xl md:text-5xl font-bold text-katze-gold mb-2 font-serif">
+                    Encuentra a tu Compañero
+                </h1>
+                <p className="text-gray-500 dark:text-gray-400 text-lg">
+                    Dales el hogar que merecen.
+                </p>
+            </div>
 
-          {/* INPUT DE BÚSQUEDA */}
-          <div className="max-w-md mx-auto relative">
-            <FaSearch className="absolute left-4 top-4 text-gray-400" />
-            <input 
-              type="text" 
-              placeholder="Buscar por nombre, edad o historia..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-gray-100 dark:bg-katze-dark-card border border-transparent focus:border-katze-gold rounded-full outline-none transition text-gray-700 dark:text-white shadow-sm"
-            />
-          </div>
+            {/* BOTÓN MANUAL (Por si quiere leer las reglas de nuevo) */}
+            <button 
+                onClick={() => setShowRules(true)}
+                className="flex items-center gap-2 px-5 py-2.5 border-2 border-katze-gold text-katze-gold font-bold rounded-full hover:bg-katze-gold hover:text-white transition shadow-sm"
+            >
+                <FaInfoCircle /> Ver Requisitos
+            </button>
         </div>
 
-        {/* ESTADOS DE CARGA/ERROR */}
-        {loading && (
-          <div className="text-center text-katze-gold text-xl animate-pulse">Cargando gatitos... 🐾</div>
-        )}
+        {/* BUSCADOR */}
+        <div className="max-w-xl mx-auto relative mb-16">
+            <FaSearch className="absolute left-5 top-4 text-gray-400" />
+            <input 
+                type="text" 
+                placeholder="Buscar por nombre, edad o historia..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-3.5 bg-gray-100 dark:bg-katze-dark-card border-2 border-transparent focus:border-katze-gold/50 rounded-2xl outline-none transition text-gray-700 dark:text-white shadow-sm"
+            />
+        </div>
 
-        {error && (
-          <div className="text-center text-red-500 bg-red-100 p-4 rounded-lg max-w-md mx-auto border border-red-200">
-            {error}
-          </div>
-        )}
+        {/* CARGA / ERROR */}
+        {loading && <div className="text-center text-katze-gold text-xl animate-pulse">Cargando gatitos... 🐾</div>}
+        {error && <div className="text-center text-red-500 bg-red-100 p-4 rounded-lg max-w-md mx-auto">{error}</div>}
 
-        {/* GRID DE TARJETAS */}
+        {/* GRID */}
         {!loading && !error && (
           <>
-            {/* Si buscaste algo y no hay resultados */}
             {gatosProcesados.length === 0 && searchTerm !== '' && (
-               <div className="text-center text-gray-500 mt-10">
-                 No encontramos gatos que coincidan con "{searchTerm}". 😿
-               </div>
+               <div className="text-center text-gray-500 mt-10">No encontramos resultados. 😿</div>
             )}
-
-            {/* Lista Final */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {gatosProcesados.map((gato) => (
                 <GatoCard key={gato._id} gato={gato} />
@@ -110,14 +128,21 @@ const AdoptaPage = () => {
           </>
         )}
 
-        {/* EMPTY STATE GLOBAL (Si no hay gatos en la BD) */}
         {!loading && gatos.length === 0 && (
           <div className="text-center text-gray-500 mt-10 py-20 bg-gray-50 dark:bg-katze-dark-card rounded-3xl">
-            <p>No hay gatos disponibles para adopción en este momento.</p>
+            <p>No hay gatos disponibles por ahora.</p>
           </div>
         )}
-
       </div>
+
+      {/* --- AQUÍ USAMOS TU COMPONENTE SEPARADO --- */}
+      {showRules && (
+        <PopupReglas 
+            onClose={handleCloseRules} 
+            onAccept={handleRulesAccepted} 
+        />
+      )}
+
     </div>
   );
 };
