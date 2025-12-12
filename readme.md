@@ -1,6 +1,10 @@
 ### KATZE - Plataforma de Adopción y Comunidad Felina
 ## "Un futuro dorado comienza contigo."
 
+## Enlaces de Despliegue (Demo)
+-   **Frontend (Vercel):** https://katze-web-app.vercel.app
+-   **Backend (Render):** https://katze-api.onrender.com
+
 Bienvenido a KATZE, una aplicación web full-stack diseñada para modernizar y optimizar el proceso de adopción de gatos, reportar mascotas perdidas y gestionar una comunidad de ayuda animal. Este proyecto no es solo un catálogo; es un sistema integral con gestión de roles, seguridad y automatización.
 
 ## Descripción del Proyecto
@@ -152,7 +156,10 @@ katze-web-app/
 │   │   │   ├── juez.Controller.ts
 │   │   │   ├── reporte.Controller.ts
 │   │   │   └── solicitud.Controller.ts
-│   │   │
+│   │   │  
+│   │   ├── data/              # (datos para la demo)
+│   │   │   └── seed.ts
+│   │   │   
 │   │   ├── middleware/         # (Intermediarios: Protección y validación)
 │   │   │   ├── auth.Middleware.ts      # (Verificación de Tokens/Sesión)
 │   │   │   └── validator.Middleware.ts # (Validación de datos de entrada)
@@ -225,6 +232,13 @@ cd katze-web-app
     # Make Webhooks (Opcional si no vas a usar automatización aún)
     GOOGLE_API_KEY=tu_gemini_api_key
 ```
+
+-   Ejecuta el seed.ts para obtener datos
+
+```bash
+    npx ts-node src/data/seed.ts
+```
+**Deberías ver: "🚀 ¡SEED COMPLETADO EXITOSAMENTE!"**
 
 -   Inicia el servidor en modo desarrollo:
 
