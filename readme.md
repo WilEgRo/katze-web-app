@@ -256,11 +256,13 @@ cd client
 npm install
 ```
 
--   Crea un archivo `.env` en la raíz de `client/`:
+-   (Opcional) Crea un archivo `.env` en la raíz de `client/` si deseas personalizar la URL de la API:
 
 ```bash
 VITE_API_URL=http://localhost:8080/api
 ```
+
+**Nota**: El proyecto ya está configurado con un proxy de Vite, por lo que no es necesario crear el archivo `.env` para desarrollo local. El proxy redirigirá automáticamente las peticiones `/api/*` al backend en `http://localhost:8080`.
 
 -   Inicia el cliente:
 
