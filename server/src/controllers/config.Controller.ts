@@ -1,17 +1,12 @@
 import { Request, Response } from "express";
 import Config from "../models/Config.Model";
 import { UploadedFile } from "express-fileupload";
-import cloudinary from "../config/cloudinary"; // Tu config existente
+import cloudinary from "../config/cloudinary";
 import fs from 'fs';
 
-/**
- * @desc Obtener la configuración actual (QR e Imagen Gato)
- * @route GET /api/config
- * @access Public
- */
+
 export const getConfig = async (req: Request, res: Response) => {
     try {
-        // Buscamos la config, si no existe la creamos vacía al vuelo
         let config = await Config.findOne({ clave: 'general' });
         if (!config) {
             config = await Config.create({ clave: 'general', qrBancoUrl: '', gatoHeroUrl: '' });
@@ -22,11 +17,7 @@ export const getConfig = async (req: Request, res: Response) => {
     }
 };
 
-/**
- * @desc Actualizar imágenes de Donación (QR y/o Gato)
- * @route PUT /api/config
- * @access Private (Admin)
- */
+
 
 export const updateConfig = async (req: Request, res: Response) => {
     try {
@@ -50,23 +41,19 @@ export const updateConfig = async (req: Request, res: Response) => {
             fs.unlinkSync(qrFile.tempFilePath);
         }
 
-        // 2. Verificar si se subió imagen del Gato Hero ('heroImage')
         if (req.files && req.files.heroImage) {
             const heroFile = req.files.heroImage as UploadedFile;
 
-            // Subir a Cloudinary
             const resultHero = await cloudinary.uploader.upload(heroFile.tempFilePath, {
                 folder: 'katze/config',
                 public_id: `gato-hero-${Date.now()}`
             });
 
-            // Guardar URL y borrar temporal
             updateData.gatoHeroUrl = resultHero.secure_url;
             fs.unlinkSync(heroFile.tempFilePath);
         }
 
-        // 3. Actualizar en Base de Datos
-        // Usamos findOneAndUpdate con upsert: true para crear si no existe
+
         const configActualizada = await Config.findOneAndUpdate(
             { clave: 'general' },
             { $set: updateData },

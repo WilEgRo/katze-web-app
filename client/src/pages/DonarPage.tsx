@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import apiClient from '../services/apiClient.Service'; // <--- Importamos el cliente API
+import apiClient from '../services/apiClient.Service';
 import {
     FaCamera,
     FaHeart,
@@ -12,7 +12,6 @@ import gatoPlaceholder from '../assets/gato-donacion.png';
 import qrPlaceholder from '../assets/qr-banco.png';
 
 const DonarPage = () => {
-    // 1. Estado para guardar las URLs que vienen del Backend
     const [configWeb, setConfigWeb] = useState({
         qrBancoUrl: '',
         gatoHeroUrl: ''
@@ -70,7 +69,6 @@ const DonarPage = () => {
         }, 2000);
     };
 
-    // 3. Lógica para decidir qué imagen mostrar
     // Si el backend tiene URL, usamos esa. Si no, usamos la de assets.
     const imagenGatoMostrar = configWeb.gatoHeroUrl ? configWeb.gatoHeroUrl : gatoPlaceholder;
     const imagenQrMostrar = configWeb.qrBancoUrl ? configWeb.qrBancoUrl : qrPlaceholder;
@@ -83,7 +81,7 @@ const DonarPage = () => {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 md:w-96 md:h-96 bg-katze-gold opacity-30 blur-[80px] rounded-full -z-10 group-hover:opacity-40 transition duration-700"></div>
                 <div className="relative h-64 w-64 md:h-80 md:w-80 transition-transform duration-500 group-hover:scale-105">
                     <img
-                        src={imagenGatoMostrar} // <--- Variable dinámica
+                        src={imagenGatoMostrar}
                         alt="Gato Donación"
                         className="w-full h-full object-contain drop-shadow-2xl"
                         style={{ filter: 'drop-shadow(0 0 15px rgba(197, 160, 89, 0.5))' }}
@@ -98,14 +96,12 @@ const DonarPage = () => {
                 Cada donación cuenta para nuestros rescates, alimentos y cuidados veterinarios.
             </p>
 
-            {/* CONTENEDOR PRINCIPAL */}
             <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
 
-                {/* LADO IZQUIERDO: EL QR (Dinámico) */}
                 <div className="bg-white dark:bg-katze-dark-card p-8 rounded-3xl shadow-lg border border-gray-100 dark:border-gray-800 flex flex-col items-center text-center h-full justify-center">
                     <div className="mb-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
                         <img
-                            src={imagenQrMostrar} // <--- Variable dinámica
+                            src={imagenQrMostrar}
                             alt="QR Banco"
                             className="w-48 h-48 object-contain"
                         />
@@ -115,10 +111,8 @@ const DonarPage = () => {
                     <p className="text-xs text-gray-400 font-mono mt-1">123-000000-00</p>
                 </div>
 
-                {/* LADO DERECHO: FORMULARIO */}
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
-                    {/* Botones de Categoría */}
                     <div className="grid grid-cols-3 gap-3">
                         {opcionesDonacion.map((opcion) => (
                             <button

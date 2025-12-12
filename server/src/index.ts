@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 8080;
 
 // ------------- Middleware -------------
 const whiteList = [
-  process.env.FRONTEND_URL, // Leerá la URL de Vercel en Producción
+  process.env.FRONTEND_URL, //vercel
   "http://localhost:5173",
 ];
 
@@ -34,7 +34,7 @@ app.use(cors({
       callback(new Error('Error de CORS: No permitido por Katze Policy'));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Permitimos PUT para subir archivos
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));

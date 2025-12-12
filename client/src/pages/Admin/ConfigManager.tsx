@@ -21,7 +21,6 @@ const ConfigManager = () => {
     useEffect(() => {
         const fetchConfig = async () => {
             try {
-                // 2. CAMBIO: Usamos apiClient.get('/config') sin la URL completa
                 const { data } = await apiClient.get('/config');
                 setConfig(data);
             } catch (error) {
@@ -55,10 +54,6 @@ const ConfigManager = () => {
         if (heroFile) formData.append('heroImage', heroFile);
 
         try {
-            // 3. CAMBIO IMPORTANTE:
-            // - Usamos apiClient.put('/config')
-            // - Ya NO necesitamos buscar el token con localStorage (el apiClient lo hace solo)
-            // - Solo especificamos que enviamos un archivo (multipart/form-data)
 
             const { data } = await apiClient.put('/config', formData, {
                 headers: {
@@ -158,7 +153,7 @@ const ConfigManager = () => {
 
                 </div>
 
-                {/* --- BOTÓN GUARDAR --- */}
+                {/* --- BOTON GUARDAR --- */}
                 <div className="mt-10 flex justify-end">
                     <button
                         onClick={handleSave}
