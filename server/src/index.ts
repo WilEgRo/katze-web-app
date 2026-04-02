@@ -27,17 +27,24 @@ const whiteList = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || whiteList.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.log("Bloqueado por CORS. Origen intentando entrar:", origin);
-      callback(new Error('Error de CORS: No permitido por Katze Policy'));
+    // permitir peticiones sin origin (curl, servidores, same-origin)
+    if (!origin) return callback(null, true);
+
+    if (whiteList.includes(origin)) {
+      return callback(null, true);
     }
+
+    console.log('Bloqueado por CORS. Origen intentando entrar:', origin);
+    // devolver false en vez de lanzar error para que CORS responda correctamente
+    return callback(null, false);
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: true
 }));
+
+// Responder preflight para todas las rutas
+app.options('*', cors());
 
 app.use(express.json());
 
