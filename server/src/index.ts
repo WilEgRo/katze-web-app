@@ -20,31 +20,49 @@ const app: Application = express();
 const PORT = process.env.PORT || 8080;
 
 // ------------- Middleware -------------
-const whiteList = [
-  process.env.FRONTEND_URL, //vercel
-  "http://localhost:5173", //vite dev
-];
+const normalizeOrigin = (value: string) => value.trim().replace(/\/$/, '');
 
-app.use(cors({
+const envOrigins = [
+  process.env.FRONTEND_URL,
+  ...(process.env.CORS_ORIGINS?.split(',') ?? []),
+]
+  .filter((origin): origin is string => Boolean(origin?.trim()))
+  .map(normalizeOrigin);
+
+const whiteList = new Set([
+  ...envOrigins,
+  'http://localhost:5173',
+  'https://katze-web-app.vercel.app',
+]);
+
+const corsOptions: cors.CorsOptions = {
   origin: function (origin, callback) {
-    // permitir peticiones sin origin (curl, servidores, same-origin)
-    if (!origin) return callback(null, true);
-
-    if (whiteList.includes(origin)) {
+    // Permitir peticiones sin origin (curl, servidores, same-origin)
+    if (!origin) {
       return callback(null, true);
     }
 
-    console.log('Bloqueado por CORS. Origen intentando entrar:', origin);
-    // devolver false en vez de lanzar error para que CORS responda correctamente
-    return callback(null, false);
+    const normalizedOrigin = normalizeOrigin(origin);
+
+    // Permite el dominio principal y previews de Vercel del proyecto
+    const isKatzVerceOrigin = /^https:\/\/katze-web-app(?:-[a-z0-9-]+)?\.vercel\.app$/i.test(normalizedOrigin);
+
+    if (whiteList.has(normalizedOrigin) || isKatzVerceOrigin) {
+      return callback(null, true);
+    }
+
+    console.log('Bloqueado por CORS. Origen intentando entrar:', normalizedOrigin);
+    return callback(new Error('Not allowed by CORS'));
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  credentials: true
-}));
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // Responder preflight para todas las rutas
-app.options('*', cors());
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 
@@ -69,5 +87,5 @@ app.get('/', (req: Request, res: Response) => {
 // Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`CORS permitido para: ${whiteList}`);
+  console.log('CORS permitido para:', Array.from(whiteList));
 }); 
