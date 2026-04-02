@@ -61,8 +61,20 @@ const corsOptions: cors.CorsOptions = {
 
 app.use(cors(corsOptions));
 
-// Responder preflight para todas las rutas
-app.options('*', cors(corsOptions));
+// reemplazo seguro
+app.options('/*', cors()); // usar '/*' en vez de '*'
+
+// fallback explícito para preflight (por si acaso)
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    // Si quieres devolver cabeceras CORS manualmente:
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    // Si usas credentials: true en cors(), el paquete cors añadirá Allow-Credentials automáticamente.
+    return res.sendStatus(204);
+  }
+  next();
+});
 
 app.use(express.json());
 
